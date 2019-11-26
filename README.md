@@ -1,5 +1,5 @@
 # json-to-code-climate-subset-converter
-CLI tool that'll convert supported JSON files to a subset of the Code Climat JSON format
+CLI tool that'll convert supported JSON files to a subset of the Code Climate JSON format
 
 ## Supported JSON files
 
