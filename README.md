@@ -10,6 +10,27 @@ CLI tool that'll convert supported JSON files to a subset of the Code Climate JS
 - [ ] [phpmd](https://github.com/phpmd/phpmd)
 - [ ] [phplint](https://github.com/overtrue/phplint)
 
+## Example input
+
+```json
+[
+    {
+        "type": "issue",
+        "type_id": 11007,
+        "check_name": "PhanUndeclaredClassConstant",
+        "description": "UndefError PhanUndeclaredClassConstant Reference to constant class from undeclared class \\PhpParser\\Node\\Stmt\\ClassMethod",
+        "severity": 10,
+        "location": {
+            "path": "app/Class.php",
+            "lines": {
+                "begin": 32,
+                "end": 34
+            }
+        }
+    }
+]
+```
+
 ## Example output
 
 ```json
