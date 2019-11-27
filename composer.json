@@ -1,0 +1,42 @@
+{
+    "name": "ttomdewit/json-to-code-climate-subset-converter",
+    "description": "CLI tool that'll convert supported JSON files to a subset of the Code Climate JSON format.",
+    "keywords": [
+        "ttomdewit",
+        "json-to-code-climate-subset-converter"
+    ],
+    "homepage": "https://github.com/ttomdewit/json-to-code-climate-subset-converter",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Tom de Wit",
+            "email": "ttomdewit@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ttomdewit\\JsonToCodeClimateSubsetConverter\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ttomdewit\\JsonToCodeClimateSubsetConverter\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
