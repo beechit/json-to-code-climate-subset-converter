@@ -1,0 +1,12 @@
+[
+    {
+        "description": "(PHPLint) unexpected 'public' (T_PUBLIC), expecting ',' or ';' in line 2",
+        "fingerprint": "9c0b73852026abfb670dd243d3b3c8f1",
+        "location": {
+            "path": "app/Class.php",
+            "lines": {
+                "begin": 2
+            }
+        }
+    }
+]

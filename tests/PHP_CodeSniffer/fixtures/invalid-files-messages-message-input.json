@@ -1,0 +1,23 @@
+{
+    "totals": {
+        "errors": 1,
+        "warnings": 0,
+        "fixable": 0
+    },
+    "files": {
+        "app\/Class.php": {
+            "errors": 1,
+            "warnings": 0,
+            "messages": [
+                {
+                    "source": "PEAR.Commenting.FileComment.Missing",
+                    "severity": 5,
+                    "fixable": false,
+                    "type": "ERROR",
+                    "line": 2,
+                    "column": 1
+                }
+            ]
+        }
+    }
+}

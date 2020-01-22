@@ -1,0 +1,15 @@
+[
+    {
+        "type": "issue",
+        "type_id": 11007,
+        "check_name": "PhanUndeclaredClassConstant",
+        "severity": 10,
+        "location": {
+            "path": "app/Class.php",
+            "lines": {
+                "begin": 32,
+                "end": 34
+            }
+        }
+    }
+]

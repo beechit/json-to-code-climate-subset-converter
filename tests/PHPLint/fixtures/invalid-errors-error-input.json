@@ -1,0 +1,24 @@
+{
+    "status": "success",
+    "options": {
+        "jobs": 5,
+        "exclude": [],
+        "extensions": [
+            "php"
+        ],
+        "json": "phplint.json",
+        "path": [
+            "app"
+        ]
+    },
+    "errors": {
+        "\/var\/www\/html\/app\/DisallowTraitsInNamespace.php": {
+            "file": "\/var\/www\/html\/app\/Class.php",
+            "line": 2
+        }
+    },
+    "time_usage": "< 1 sec",
+    "memory_usage": "2.0 MiB",
+    "using_cache": true,
+    "files_count": 23
+}

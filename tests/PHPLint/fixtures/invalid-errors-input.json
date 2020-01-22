@@ -1,0 +1,18 @@
+{
+    "status": "success",
+    "options": {
+        "jobs": 5,
+        "exclude": [],
+        "extensions": [
+            "php"
+        ],
+        "json": "phplint.json",
+        "path": [
+            "app"
+        ]
+    },
+    "time_usage": "< 1 sec",
+    "memory_usage": "2.0 MiB",
+    "using_cache": true,
+    "files_count": 23
+}

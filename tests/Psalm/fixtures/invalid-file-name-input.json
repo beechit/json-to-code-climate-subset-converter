@@ -1,0 +1,18 @@
+[
+    {
+        "severity": "info",
+        "line_from": 2,
+        "line_to": 2,
+        "type": "PropertyNotSetInConstructor",
+        "message": "Property Illuminate\\Foundation\\Console\\Kernel::$artisan is not defined in constructor of App\\Console\\Kernel and in any methods called in the constructor",
+        "file_path": "\/var\/www\/html\/app\/Console\/Kernel.php",
+        "snippet": "class Kernel extends ConsoleKernel",
+        "selected_text": "Kernel",
+        "from": 141,
+        "to": 147,
+        "snippet_from": 135,
+        "snippet_to": 169,
+        "column_from": 7,
+        "column_to": 13
+    }
+]

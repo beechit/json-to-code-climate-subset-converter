@@ -1,0 +1,9 @@
+[
+    {
+        "type": "issue",
+        "type_id": 11007,
+        "check_name": "PhanUndeclaredClassConstant",
+        "description": "UndefError PhanUndeclaredClassConstant Reference to constant class from undeclared class \\PhpParser\\Node\\Stmt\\ClassMethod",
+        "severity": 10
+    }
+]

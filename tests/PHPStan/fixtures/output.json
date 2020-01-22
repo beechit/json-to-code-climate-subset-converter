@@ -1,0 +1,12 @@
+[
+    {
+        "description": "(PHPStan) Return type (array) of method App\\Class::processNode() should be covariant with return type (array<PHPStan\\Rules\\RuleError|string>) of method PHPStan\\Rules\\Rule::processNode()",
+        "fingerprint": "44fee3bc600b885c545139e2f5cfb49d",
+        "location": {
+            "path": "app/Class.php",
+            "lines": {
+                "begin": 2
+            }
+        }
+    }
+]

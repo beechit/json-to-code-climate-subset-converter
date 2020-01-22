@@ -1,6 +1,6 @@
 <?php
 
-namespace Ttomdewit\Tests;
+namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 

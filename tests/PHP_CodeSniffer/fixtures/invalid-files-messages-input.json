@@ -1,0 +1,13 @@
+{
+    "totals": {
+        "errors": 1,
+        "warnings": 0,
+        "fixable": 0
+    },
+    "files": {
+        "app\/Class.php": {
+            "errors": 1,
+            "warnings": 0
+        }
+    }
+}
