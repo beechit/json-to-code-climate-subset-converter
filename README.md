@@ -1,3 +1,5 @@
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/beechit/json-to-code-climate-subset-converter/Run%20PHPUnit%20tests?label=Tests)
+
 # json-to-code-climate-subset-converter
 CLI tool that'll convert supported JSON files to a subset of the Code Climate JSON format. The output file `code-climate.json` can be used in GitLab CI to show degrations in merge requests via the report artifact. See [GitLab Code Quality documentation](https://docs.gitlab.com/ee/user/project/merge_requests/code_quality.html#implementing-a-custom-tool) for more information.
 
