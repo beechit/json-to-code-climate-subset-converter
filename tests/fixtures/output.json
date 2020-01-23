@@ -31,17 +31,6 @@
         }
     },
     {
-        "description": "(PHPMD) Avoid unused parameters such as '$schedule'.",
-        "fingerprint": "70f480e1580e09ea094ac164e72a53bc",
-        "location": {
-            "path": "app/Class.php",
-            "lines": {
-                "begin": 2,
-                "end": 2
-            }
-        }
-    },
-    {
         "description": "(PHPStan) Return type (array) of method App\\Class::processNode() should be covariant with return type (array<PHPStan\\Rules\\RuleError|string>) of method PHPStan\\Rules\\Rule::processNode()",
         "fingerprint": "44fee3bc600b885c545139e2f5cfb49d",
         "location": {
