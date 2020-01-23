@@ -3,16 +3,11 @@
 namespace BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractConverter;
-use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
 use BeechIt\JsonToCodeClimateSubsetConverter\ConvertToSubsetInterface;
+use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
 
 final class PhpCodeSnifferConvertToSubset extends AbstractConverter implements ConvertToSubsetInterface
 {
-    protected function getToolName(): string
-    {
-        return 'PHP_CodeSniffer';
-    }
-
     public function convertToSubset(): void
     {
         try {
@@ -39,5 +34,10 @@ final class PhpCodeSnifferConvertToSubset extends AbstractConverter implements C
         } catch (InvalidJsonException $exception) {
             throw $exception;
         }
+    }
+
+    protected function getToolName(): string
+    {
+        return 'PHP_CodeSniffer';
     }
 }

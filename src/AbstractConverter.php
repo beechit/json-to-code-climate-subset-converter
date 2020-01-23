@@ -20,6 +20,19 @@ abstract class AbstractConverter implements OutputInterface
         $this->json = $json;
     }
 
+    public function getOutput(): array
+    {
+        return $this->codeClimateNodes;
+    }
+
+    public function getJsonEncodedOutput(): string
+    {
+        return json_encode(
+            $this->getOutput(),
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+        );
+    }
+
     abstract protected function getToolName(): string;
 
     protected function createFingerprint($description, $filename, $line): string
@@ -40,19 +53,6 @@ abstract class AbstractConverter implements OutputInterface
             '(%s) %s',
             $this->getToolName(),
             $description
-        );
-    }
-
-    public function getOutput(): array
-    {
-        return $this->codeClimateNodes;
-    }
-
-    public function getJsonEncodedOutput(): string
-    {
-        return json_encode(
-            $this->getOutput(),
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
         );
     }
 }

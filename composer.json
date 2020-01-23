@@ -32,6 +32,7 @@
         "symfony/console": "^5.0"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16",
         "overtrue/phplint": "^1.2",
         "phpstan/phpstan": "^0.12.7",
         "phpunit/phpunit": "^8.0",
