@@ -36,10 +36,6 @@ class ConverterCommand extends Command
             'validator' => PhpLintJsonValidator::class,
             'converter' => PhpLintConvertToSubset::class,
         ],
-        'PHPMD' => [
-            'validator' => PhpMDJsonValidator::class,
-            'converter' => PhpMDConvertToSubset::class,
-        ],
         'PHPStan' => [
             'validator' => PHPStanJsonValidator::class,
             'converter' => PHPStanConvertToSubset::class,
