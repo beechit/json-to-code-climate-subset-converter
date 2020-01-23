@@ -55,7 +55,8 @@
         "phpunit": "vendor/bin/phpunit",
         "phpstan": "vendor/bin/phpstan analyse src --level max",
         "psalm": "vendor/bin/psalm src",
-        "phplint": "vendor/bin/phplint src"
+        "phplint": "vendor/bin/phplint src",
+        "php-cs-fixer": "vendor/bin/php-cs-fixer fix src"
     },
     "config": {
         "sort-packages": true
