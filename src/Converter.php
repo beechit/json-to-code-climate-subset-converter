@@ -6,6 +6,7 @@ class Converter implements ConvertToSubsetInterface, OutputInterface
 {
     /** @var array $codeClimateNodes */
     protected $codeClimateNodes = [];
+
     /** @var AbstractConverter[] $converters */
     private $converters;
 
