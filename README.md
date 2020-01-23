@@ -12,7 +12,7 @@ Please note this project is actively worked on but it's not ready for production
 - [ ] Write tests for console command
 - [ ] Add static analysis
   - [x] [phpstan](https://github.com/phpstan/phpstan)
-  - [ ] [psalm](https://github.com/vimeo/psalm)
+  - [x] [psalm](https://github.com/vimeo/psalm)
   - [ ] [phan](https://github.com/phan/phan)
   - [ ] [phpcs](https://github.com/squizlabs/PHP_CodeSniffer)
   - [ ] [phpmd](https://github.com/phpmd/phpmd)
