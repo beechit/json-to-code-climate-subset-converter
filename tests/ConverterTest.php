@@ -73,23 +73,6 @@ class ConverterTest extends TestCase
                     ],
                 ],
             ],
-            'PHPMD' => [
-                'jsonInput' => '/PHPMD/fixtures/input.json',
-                'jsonOutput' => '/PHPMD/fixtures/output.json',
-                'validator' => PhpMDJsonValidator::class,
-                'converter' => PhpMDConvertToSubset::class,
-                'output' => [
-                    'description' => '(PHPMD) Avoid unused parameters such as \'$schedule\'.',
-                    'fingerprint' => '70f480e1580e09ea094ac164e72a53bc',
-                    'location' => [
-                        'path' => 'app/Class.php',
-                        'lines' => [
-                            'begin' => 2,
-                            'end' => 2,
-                        ],
-                    ],
-                ],
-            ],
             'PHPStan' => [
                 'jsonInput' => '/PHPStan/fixtures/input.json',
                 'jsonOutput' => '/PHPStan/fixtures/output.json',
