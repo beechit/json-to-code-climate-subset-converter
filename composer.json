@@ -49,7 +49,8 @@
     },
     "scripts": {
         "test": "vendor/bin/phpunit",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "docker-build": "docker build -t converter ."
     },
     "config": {
         "sort-packages": true
