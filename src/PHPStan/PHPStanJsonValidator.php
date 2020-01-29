@@ -4,9 +4,8 @@ namespace BeechIt\JsonToCodeClimateSubsetConverter\PHPStan;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
-use BeechIt\JsonToCodeClimateSubsetConverter\JsonValidatorInterface;
 
-class PHPStanJsonValidator extends AbstractJsonValidator implements JsonValidatorInterface
+class PHPStanJsonValidator extends AbstractJsonValidator
 {
     public function validateJson(): void
     {

@@ -3,10 +3,9 @@
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Phan;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractConverter;
-use BeechIt\JsonToCodeClimateSubsetConverter\ConvertToSubsetInterface;
 use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
 
-final class PhanConvertToSubset extends AbstractConverter implements ConvertToSubsetInterface
+final class PhanConvertToSubset extends AbstractConverter
 {
     public function convertToSubset(): void
     {

@@ -37,7 +37,10 @@
         "phan/phan": "^2.4",
         "phpstan/phpstan": "^0.12.7",
         "phpunit/phpunit": "^8.0",
+        "rector/rector": "^0.6.13",
         "squizlabs/php_codesniffer": "^3.5",
+        "thecodingmachine/phpstan-safe-rule": "^1.0",
+        "thecodingmachine/safe": "^1.0",
         "vimeo/psalm": "^3.8"
     },
     "bin": [
@@ -61,7 +64,8 @@
         "php-cs-fixer": "vendor/bin/php-cs-fixer fix src",
         "php-cbf": "vendor/bin/phpcbf src --standard=PSR1,PSR2,PSR12",
         "php-cs": "vendor/bin/phpcs src --standard=PSR1,PSR2,PSR12",
-        "phan": "vendor/bin/phan --allow-polyfill-parser src"
+        "phan": "vendor/bin/phan --allow-polyfill-parser src",
+        "rector-safe": "vendor/bin/rector process src/ --config vendor/thecodingmachine/safe/rector-migrate-0.6.yml"
     },
     "config": {
         "sort-packages": true

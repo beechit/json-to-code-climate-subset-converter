@@ -2,7 +2,12 @@
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter;
 
-abstract class AbstractConverter implements OutputInterface
+use Safe\Exceptions\JsonException;
+use Safe\Exceptions\StringsException;
+use function Safe\json_encode;
+use function Safe\sprintf;
+
+abstract class AbstractConverter implements OutputInterface, ConvertToSubsetInterface
 {
     /**
      * @var AbstractJsonValidator
@@ -10,15 +15,20 @@ abstract class AbstractConverter implements OutputInterface
     protected $abstractJsonValidator;
 
     /**
-     * @var mixed $json
+     * @var mixed
      */
     protected $json;
 
     /**
-     * @var array $codeClimateNodes
+     * @var array
      */
     protected $codeClimateNodes;
 
+    /**
+     * AbstractConverter constructor.
+     *
+     * @param mixed $json
+     */
     public function __construct(AbstractJsonValidator $abstractJsonValidator, $json)
     {
         $this->abstractJsonValidator = $abstractJsonValidator;
@@ -33,32 +43,55 @@ abstract class AbstractConverter implements OutputInterface
 
     public function getJsonEncodedOutput(): string
     {
-        return json_encode(
-            $this->getOutput(),
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
-        );
+        try {
+            return json_encode(
+                $this->getOutput(),
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+            );
+        } catch (JsonException $exception) {
+            throw new UnableToGetJsonEncodedOutputException(
+                $exception->getMessage()
+            );
+        }
     }
+
+    abstract public function convertToSubset(): void;
 
     abstract protected function getToolName(): string;
 
-    protected function createFingerprint($description, $filename, $line): string
-    {
-        return md5(
-            sprintf(
-                '%s%s%s',
-                $description,
-                $filename,
-                $line
-            )
-        );
+    protected function createFingerprint(
+        string $description,
+        string $filename,
+        string $line
+    ): string {
+        try {
+            return md5(
+                sprintf(
+                    '%s%s%s',
+                    $description,
+                    $filename,
+                    $line
+                )
+            );
+        } catch (StringsException $exception) {
+            throw new UnableToCreateFingerprint(
+                $exception->getMessage()
+            );
+        }
     }
 
     protected function createDescription(string $description): string
     {
-        return sprintf(
-            '(%s) %s',
-            $this->getToolName(),
-            $description
-        );
+        try {
+            return sprintf(
+                '(%s) %s',
+                $this->getToolName(),
+                $description
+            );
+        } catch (StringsException $exception) {
+            throw new UnableToCreateDescription(
+                $exception->getMessage()
+            );
+        }
     }
 }
