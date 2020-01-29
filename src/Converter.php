@@ -45,7 +45,7 @@ class Converter implements ConvertToSubsetInterface, OutputInterface
 
     public function getJsonEncodedOutput(): string
     {
-        return json_encode(
+        return \Safe\json_encode(
             $this->getOutput(),
             JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
         );

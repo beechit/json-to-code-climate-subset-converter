@@ -38,7 +38,7 @@ abstract class AbstractConverter implements OutputInterface
 
     public function getJsonEncodedOutput(): string
     {
-        return json_encode(
+        return \Safe\json_encode(
             $this->getOutput(),
             JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
         );
@@ -53,7 +53,7 @@ abstract class AbstractConverter implements OutputInterface
     ): string
     {
         return md5(
-            sprintf(
+            \Safe\sprintf(
                 '%s%s%s',
                 $description,
                 $filename,
@@ -64,7 +64,7 @@ abstract class AbstractConverter implements OutputInterface
 
     protected function createDescription(string $description): string
     {
-        return sprintf(
+        return \Safe\sprintf(
             '(%s) %s',
             $this->getToolName(),
             $description

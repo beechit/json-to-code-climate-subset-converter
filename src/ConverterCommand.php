@@ -74,22 +74,22 @@ class ConverterCommand extends Command
         foreach (static::$supportedConverters as $converterName => $supportedConverter) {
             if (false !== $input->getOption(strtolower($converterName))) {
                 $filename = $input->getOption(
-                    sprintf(
+                    \Safe\sprintf(
                         '%s-json-file',
                         strtolower($converterName)
                     )
                 );
 
                 $output->writeln(
-                    sprintf(
+                    \Safe\sprintf(
                         '<comment>Converting %s via %s</comment>',
                         $converterName,
                         $filename
                     )
                 );
 
-                $jsonInput = file_get_contents($filename);
-                $jsonDecodedInput = json_decode($jsonInput);
+                $jsonInput = \Safe\file_get_contents($filename);
+                $jsonDecodedInput = \Safe\json_decode($jsonInput);
 
                 /**
                  * @var AbstractJsonValidator $validator
@@ -111,13 +111,13 @@ class ConverterCommand extends Command
             $outputFilename = $input->getOption('output');
 
             $output->writeln(
-                sprintf(
+                \Safe\sprintf(
                     '<info>Writing output to %s</info>',
                     $outputFilename
                 )
             );
 
-            file_put_contents(
+            \Safe\file_put_contents(
                 $outputFilename,
                 $converter->getJsonEncodedOutput()
             );
@@ -134,7 +134,7 @@ class ConverterCommand extends Command
             strtolower($converter),
             null,
             InputOption::VALUE_OPTIONAL,
-            sprintf(
+            \Safe\sprintf(
                 'Include %s converter',
                 $converter
             ),
@@ -142,14 +142,14 @@ class ConverterCommand extends Command
         );
 
         $this->addOption(
-            sprintf(
+            \Safe\sprintf(
                 '%s-json-file',
                 strtolower($converter)
             ),
             null,
             InputOption::VALUE_OPTIONAL,
             'Location to JSON file',
-            sprintf(
+            \Safe\sprintf(
                 '%s.json',
                 strtolower($converter)
             )
