@@ -85,10 +85,14 @@ class ConverterCommand extends Command
                 $jsonInput = file_get_contents($filename);
                 $jsonDecodedInput = json_decode($jsonInput);
 
-                /** @var AbstractJsonValidator $validator */
+                /**
+                 * @var AbstractJsonValidator $validator
+                 */
                 $validator = new $supportedConverter['validator']($jsonDecodedInput);
 
-                /** @var AbstractConverter $converterImplementation */
+                /**
+                 * AbstractConverter $converterImplementation
+                 */
                 $converterImplementation = new $supportedConverter['converter']($validator, $jsonDecodedInput);
 
                 $converter->addConverter($converterImplementation);

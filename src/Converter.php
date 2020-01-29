@@ -4,10 +4,14 @@ namespace BeechIt\JsonToCodeClimateSubsetConverter;
 
 class Converter implements ConvertToSubsetInterface, OutputInterface
 {
-    /** @var array $codeClimateNodes */
+    /**
+     * @var array $codeClimateNodes
+     */
     protected $codeClimateNodes = [];
 
-    /** @var AbstractConverter[] $converters */
+    /**
+     * @var AbstractConverter[] $converters
+     */
     private $converters;
 
     public function addConverter(AbstractConverter $converter): void
@@ -21,7 +25,9 @@ class Converter implements ConvertToSubsetInterface, OutputInterface
             throw new NoConvertersEnabledException();
         }
 
-        /** @var AbstractConverter $converter */
+        /**
+         * @var AbstractConverter $converter
+         */
         foreach ($this->converters as $converter) {
             $converter->convertToSubset();
 

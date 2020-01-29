@@ -1,4 +1,4 @@
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/beechit/json-to-code-climate-subset-converter/Run%20PHPUnit%20tests?label=PHPUnit) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/beechit/json-to-code-climate-subset-converter/Run%20PHPStan?label=PHPStan) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/beechit/json-to-code-climate-subset-converter/Run%20Psalm?label=Psalm) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/beechit/json-to-code-climate-subset-converter/Run%20PHPLint?label=PHPLint)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/beechit/json-to-code-climate-subset-converter/Run%20PHPUnit%20tests?label=PHPUnit) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/beechit/json-to-code-climate-subset-converter/Run%20PHPStan?label=PHPStan) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/beechit/json-to-code-climate-subset-converter/Run%20Psalm?label=Psalm) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/beechit/json-to-code-climate-subset-converter/Run%20PHP_CodeSniffer?label=PHP_CodeSniffer) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/beechit/json-to-code-climate-subset-converter/Run%20PHPLint?label=PHPLint)
 
 # json-to-code-climate-subset-converter
 CLI tool that'll convert supported JSON files to a subset of the Code Climate JSON format. The output file `code-climate.json` can be used in GitLab CI to show degrations in merge requests via the report artifact. See [GitLab Code Quality documentation](https://docs.gitlab.com/ee/user/project/merge_requests/code_quality.html#implementing-a-custom-tool) for more information.
@@ -14,7 +14,7 @@ Please note this project is actively worked on but it's not ready for production
   - [x] [phpstan](https://github.com/phpstan/phpstan)
   - [x] [psalm](https://github.com/vimeo/psalm)
   - [ ] [phan](https://github.com/phan/phan)
-  - [ ] [phpcs](https://github.com/squizlabs/PHP_CodeSniffer)
+  - [x] [phpcs](https://github.com/squizlabs/PHP_CodeSniffer)
   - [ ] [phpmd](https://github.com/phpmd/phpmd)
   - [x] [phplint](https://github.com/overtrue/phplint)
 
