@@ -4,7 +4,6 @@ namespace BeechIt\JsonToCodeClimateSubsetConverter\Phan;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
-use BeechIt\JsonToCodeClimateSubsetConverter\JsonValidatorInterface;
 
 class PhanJsonValidator extends AbstractJsonValidator
 {

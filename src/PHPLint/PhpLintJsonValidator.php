@@ -4,7 +4,6 @@ namespace BeechIt\JsonToCodeClimateSubsetConverter\PHPLint;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
-use BeechIt\JsonToCodeClimateSubsetConverter\JsonValidatorInterface;
 
 class PhpLintJsonValidator extends AbstractJsonValidator
 {

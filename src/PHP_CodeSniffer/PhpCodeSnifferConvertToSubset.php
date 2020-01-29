@@ -3,7 +3,6 @@
 namespace BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractConverter;
-use BeechIt\JsonToCodeClimateSubsetConverter\ConvertToSubsetInterface;
 use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
 
 final class PhpCodeSnifferConvertToSubset extends AbstractConverter
