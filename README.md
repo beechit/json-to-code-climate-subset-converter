@@ -14,7 +14,7 @@ Please note this project is actively worked on but it's not ready for production
   - [x] [phpstan](https://github.com/phpstan/phpstan)
   - [x] [psalm](https://github.com/vimeo/psalm)
   - [ ] [phan](https://github.com/phan/phan)
-  - [ ] [phpcs](https://github.com/squizlabs/PHP_CodeSniffer)
+  - [x] [phpcs](https://github.com/squizlabs/PHP_CodeSniffer)
   - [ ] [phpmd](https://github.com/phpmd/phpmd)
   - [x] [phplint](https://github.com/overtrue/phplint)
 
