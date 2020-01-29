@@ -64,7 +64,8 @@
         "php-cs-fixer": "vendor/bin/php-cs-fixer fix src",
         "php-cbf": "vendor/bin/phpcbf src --standard=PSR1,PSR2,PSR12",
         "php-cs": "vendor/bin/phpcs src --standard=PSR1,PSR2,PSR12",
-        "phan": "vendor/bin/phan --allow-polyfill-parser src"
+        "phan": "vendor/bin/phan --allow-polyfill-parser src",
+        "rector-safe": "vendor/bin/rector process src/ --config vendor/thecodingmachine/safe/rector-migrate-0.6.yml"
     },
     "config": {
         "sort-packages": true
