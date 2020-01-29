@@ -4,13 +4,19 @@ namespace BeechIt\JsonToCodeClimateSubsetConverter;
 
 abstract class AbstractConverter implements OutputInterface
 {
-    /** @var AbstractJsonValidator */
+    /**
+     * @var AbstractJsonValidator
+     */
     protected $abstractJsonValidator;
 
-    /** @var mixed $json */
+    /**
+     * @var mixed $json
+     */
     protected $json;
 
-    /** @var array $codeClimateNodes */
+    /**
+     * @var array $codeClimateNodes
+     */
     protected $codeClimateNodes;
 
     public function __construct(AbstractJsonValidator $abstractJsonValidator, $json)
