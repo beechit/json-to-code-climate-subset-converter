@@ -6,7 +6,7 @@ use BeechIt\JsonToCodeClimateSubsetConverter\AbstractJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
 use BeechIt\JsonToCodeClimateSubsetConverter\JsonValidatorInterface;
 
-class PsalmJsonValidator extends AbstractJsonValidator implements JsonValidatorInterface
+class PsalmJsonValidator extends AbstractJsonValidator
 {
     public function validateJson(): void
     {

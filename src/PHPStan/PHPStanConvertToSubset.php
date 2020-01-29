@@ -6,7 +6,7 @@ use BeechIt\JsonToCodeClimateSubsetConverter\AbstractConverter;
 use BeechIt\JsonToCodeClimateSubsetConverter\ConvertToSubsetInterface;
 use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
 
-final class PHPStanConvertToSubset extends AbstractConverter implements ConvertToSubsetInterface
+final class PHPStanConvertToSubset extends AbstractConverter
 {
     public function convertToSubset(): void
     {

@@ -2,15 +2,18 @@
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter;
 
+use Safe\Exceptions\JsonException;
+use function Safe\json_encode;
+
 class Converter implements ConvertToSubsetInterface, OutputInterface
 {
     /**
-     * @var array $codeClimateNodes
+     * @var array
      */
     protected $codeClimateNodes = [];
 
     /**
-     * @var AbstractConverter[] $converters
+     * @var AbstractConverter[]
      */
     private $converters;
 
@@ -25,9 +28,7 @@ class Converter implements ConvertToSubsetInterface, OutputInterface
             throw new NoConvertersEnabledException();
         }
 
-        /**
-         * @var AbstractConverter $converter
-         */
+        /** @var AbstractConverter $converter */
         foreach ($this->converters as $converter) {
             $converter->convertToSubset();
 
@@ -45,9 +46,15 @@ class Converter implements ConvertToSubsetInterface, OutputInterface
 
     public function getJsonEncodedOutput(): string
     {
-        return \Safe\json_encode(
-            $this->getOutput(),
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
-        );
+        try {
+            return json_encode(
+                $this->getOutput(),
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+            );
+        } catch (JsonException $exception) {
+            throw new UnableToGetJsonEncodedOutputException(
+                $exception->getMessage()
+            );
+        }
     }
 }
