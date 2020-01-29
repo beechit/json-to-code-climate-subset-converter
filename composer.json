@@ -58,6 +58,7 @@
         "psalm": "vendor/bin/psalm src",
         "phplint": "vendor/bin/phplint src",
         "php-cs-fixer": "vendor/bin/php-cs-fixer fix src",
+        "php-cbf": "vendor/bin/phpcbf src --standard=PSR1,PSR2,PSR12",
         "php-cs": "vendor/bin/phpcs src --standard=PSR1,PSR2,PSR12"
     },
     "config": {
