@@ -34,6 +34,7 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
         "overtrue/phplint": "^1.2",
+        "phan/phan": "^2.4",
         "phpstan/phpstan": "^0.12.7",
         "phpunit/phpunit": "^8.0",
         "squizlabs/php_codesniffer": "^3.5",
@@ -59,7 +60,8 @@
         "phplint": "vendor/bin/phplint src",
         "php-cs-fixer": "vendor/bin/php-cs-fixer fix src",
         "php-cbf": "vendor/bin/phpcbf src --standard=PSR1,PSR2,PSR12",
-        "php-cs": "vendor/bin/phpcs src --standard=PSR1,PSR2,PSR12"
+        "php-cs": "vendor/bin/phpcs src --standard=PSR1,PSR2,PSR12",
+        "phan": "vendor/bin/phan --allow-polyfill-parser src"
     },
     "config": {
         "sort-packages": true
