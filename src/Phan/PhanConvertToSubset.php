@@ -3,16 +3,11 @@
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Phan;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractConverter;
-use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
 use BeechIt\JsonToCodeClimateSubsetConverter\ConvertToSubsetInterface;
+use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
 
 final class PhanConvertToSubset extends AbstractConverter implements ConvertToSubsetInterface
 {
-    protected function getToolName(): string
-    {
-        return 'Phan';
-    }
-
     public function convertToSubset(): void
     {
         try {
@@ -38,5 +33,10 @@ final class PhanConvertToSubset extends AbstractConverter implements ConvertToSu
         } catch (InvalidJsonException $exception) {
             throw $exception;
         }
+    }
+
+    protected function getToolName(): string
+    {
+        return 'Phan';
     }
 }

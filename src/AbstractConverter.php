@@ -4,13 +4,19 @@ namespace BeechIt\JsonToCodeClimateSubsetConverter;
 
 abstract class AbstractConverter implements OutputInterface
 {
-    /** @var AbstractJsonValidator */
+    /**
+     * @var AbstractJsonValidator
+     */
     protected $abstractJsonValidator;
 
-    /** @var mixed $json */
+    /**
+     * @var mixed $json
+     */
     protected $json;
 
-    /** @var array $codeClimateNodes */
+    /**
+     * @var array $codeClimateNodes
+     */
     protected $codeClimateNodes;
 
     public function __construct(AbstractJsonValidator $abstractJsonValidator, $json)
@@ -18,6 +24,19 @@ abstract class AbstractConverter implements OutputInterface
         $this->abstractJsonValidator = $abstractJsonValidator;
 
         $this->json = $json;
+    }
+
+    public function getOutput(): array
+    {
+        return $this->codeClimateNodes;
+    }
+
+    public function getJsonEncodedOutput(): string
+    {
+        return json_encode(
+            $this->getOutput(),
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+        );
     }
 
     abstract protected function getToolName(): string;
@@ -40,19 +59,6 @@ abstract class AbstractConverter implements OutputInterface
             '(%s) %s',
             $this->getToolName(),
             $description
-        );
-    }
-
-    public function getOutput(): array
-    {
-        return $this->codeClimateNodes;
-    }
-
-    public function getJsonEncodedOutput(): string
-    {
-        return json_encode(
-            $this->getOutput(),
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
         );
     }
 }

@@ -2,10 +2,6 @@
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer\PhpCodeSnifferConvertToSubset;
@@ -18,6 +14,10 @@ use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmJsonValidator;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class ConverterCommand extends Command
 {
@@ -36,17 +36,13 @@ class ConverterCommand extends Command
             'validator' => PhpLintJsonValidator::class,
             'converter' => PhpLintConvertToSubset::class,
         ],
-        'PHPMD' => [
-            'validator' => PhpMDJsonValidator::class,
-            'converter' => PhpMDConvertToSubset::class
-        ],
         'PHPStan' => [
             'validator' => PHPStanJsonValidator::class,
             'converter' => PHPStanConvertToSubset::class,
         ],
         'Psalm' => [
             'validator' => PsalmJsonValidator::class,
-            'converter' => PsalmConvertToSubset::class
+            'converter' => PsalmConvertToSubset::class,
         ],
     ];
 
@@ -63,6 +59,67 @@ class ConverterCommand extends Command
             'Where to output JSON',
             'code-climate.json'
         );
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $converter = new Converter();
+
+        foreach (static::$supportedConverters as $converterName => $supportedConverter) {
+            if (false !== $input->getOption(strtolower($converterName))) {
+                $filename = $input->getOption(
+                    sprintf(
+                        '%s-json-file',
+                        strtolower($converterName)
+                    )
+                );
+
+                $output->writeln(
+                    sprintf(
+                        '<comment>Converting %s via %s</comment>',
+                        $converterName,
+                        $filename
+                    )
+                );
+
+                $jsonInput = file_get_contents($filename);
+                $jsonDecodedInput = json_decode($jsonInput);
+
+                /**
+                 * @var AbstractJsonValidator $validator
+                 */
+                $validator = new $supportedConverter['validator']($jsonDecodedInput);
+
+                /**
+                 * AbstractConverter $converterImplementation
+                 */
+                $converterImplementation = new $supportedConverter['converter']($validator, $jsonDecodedInput);
+
+                $converter->addConverter($converterImplementation);
+            }
+        }
+
+        try {
+            $converter->convertToSubset();
+
+            $outputFilename = $input->getOption('output');
+
+            $output->writeln(
+                sprintf(
+                    '<info>Writing output to %s</info>',
+                    $outputFilename
+                )
+            );
+
+            file_put_contents(
+                $outputFilename,
+                $converter->getJsonEncodedOutput()
+            );
+        } catch (NoConvertersEnabledException $exception) {
+            $output->writeln('<error>Please include at least 1 converter.</error>');
+        }
+
+        return 1;
     }
 
     private function option(string $converter): void
@@ -91,62 +148,5 @@ class ConverterCommand extends Command
                 strtolower($converter)
             )
         );
-    }
-
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $converter = new Converter;
-
-        foreach (static::$supportedConverters as $converterName => $supportedConverter) {
-            if (false !== $input->getOption(strtolower($converterName))) {
-                $filename = $input->getOption(
-                    sprintf(
-                        '%s-json-file',
-                        strtolower($converterName)
-                    )
-                );
-
-                $output->writeln(
-                    sprintf(
-                        '<comment>Converting %s via %s</comment>',
-                        $converterName,
-                        $filename
-                    )
-                );
-
-                $jsonInput = file_get_contents($filename);
-                $jsonDecodedInput = json_decode($jsonInput);
-
-                /** @var AbstractJsonValidator $validator */
-                $validator = new $supportedConverter['validator']($jsonDecodedInput);
-
-                /** @var AbstractConverter $converterImplementation */
-                $converterImplementation = new $supportedConverter['converter']($validator, $jsonDecodedInput);
-
-                $converter->addConverter($converterImplementation);
-            }
-        }
-
-        try {
-            $converter->convertToSubset();
-
-            $outputFilename = $input->getOption('output');
-
-            $output->writeln(
-                sprintf(
-                    '<info>Writing output to %s</info>',
-                    $outputFilename
-                )
-            );
-
-            file_put_contents(
-                $outputFilename,
-                $converter->getJsonEncodedOutput()
-            );
-        } catch (NoConvertersEnabledException $exception) {
-            $output->writeln('<error>Please include at least 1 converter.</error>');
-        }
-
-        return 1;
     }
 }

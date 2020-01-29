@@ -3,16 +3,11 @@
 namespace BeechIt\JsonToCodeClimateSubsetConverter\PHPStan;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractConverter;
-use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
 use BeechIt\JsonToCodeClimateSubsetConverter\ConvertToSubsetInterface;
+use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
 
 final class PHPStanConvertToSubset extends AbstractConverter implements ConvertToSubsetInterface
 {
-    protected function getToolName(): string
-    {
-        return 'PHPStan';
-    }
-
     public function convertToSubset(): void
     {
         try {
@@ -42,5 +37,10 @@ final class PHPStanConvertToSubset extends AbstractConverter implements ConvertT
         } catch (InvalidJsonException $exception) {
             throw $exception;
         }
+    }
+
+    protected function getToolName(): string
+    {
+        return 'PHPStan';
     }
 }
