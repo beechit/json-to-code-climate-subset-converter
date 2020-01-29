@@ -19,6 +19,11 @@ abstract class AbstractConverter implements OutputInterface
      */
     protected $codeClimateNodes;
 
+    /**
+     * AbstractConverter constructor.
+     * @param AbstractJsonValidator $abstractJsonValidator
+     * @param mixed $json
+     */
     public function __construct(AbstractJsonValidator $abstractJsonValidator, $json)
     {
         $this->abstractJsonValidator = $abstractJsonValidator;
@@ -41,7 +46,11 @@ abstract class AbstractConverter implements OutputInterface
 
     abstract protected function getToolName(): string;
 
-    protected function createFingerprint($description, $filename, $line): string
+    protected function createFingerprint(
+        string $description,
+        string $filename,
+        string $line
+    ): string
     {
         return md5(
             sprintf(

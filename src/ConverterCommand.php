@@ -21,8 +21,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ConverterCommand extends Command
 {
+    /**
+     * @var string $defaultName
+     */
     protected static $defaultName = 'convert';
 
+    /**
+     * @var array $supportedConverters
+     */
     private static $supportedConverters = [
         'Phan' => [
             'validator' => PhanJsonValidator::class,
@@ -46,7 +52,7 @@ class ConverterCommand extends Command
         ],
     ];
 
-    protected function configure()
+    protected function configure(): void
     {
         foreach (static::$supportedConverters as $converterName => $converter) {
             $this->option($converterName);

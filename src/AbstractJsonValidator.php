@@ -9,6 +9,10 @@ abstract class AbstractJsonValidator
      */
     protected $json;
 
+    /**
+     * AbstractJsonValidator constructor.
+     * @param mixed $json
+     */
     public function __construct($json)
     {
         $this->json = $json;
