@@ -8,11 +8,6 @@ use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
 
 final class PhpLintConvertToSubset extends AbstractConverter implements ConvertToSubsetInterface
 {
-    protected function getToolName(): string
-    {
-        return 'PHPLint';
-    }
-
     public function convertToSubset(): void
     {
         try {
@@ -42,5 +37,10 @@ final class PhpLintConvertToSubset extends AbstractConverter implements ConvertT
         } catch (InvalidJsonException $exception) {
             throw $exception;
         }
+    }
+
+    protected function getToolName(): string
+    {
+        return 'PHPLint';
     }
 }

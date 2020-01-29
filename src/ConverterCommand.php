@@ -2,10 +2,6 @@
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer\PhpCodeSnifferConvertToSubset;
@@ -18,6 +14,10 @@ use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmJsonValidator;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class ConverterCommand extends Command
 {
@@ -36,17 +36,13 @@ class ConverterCommand extends Command
             'validator' => PhpLintJsonValidator::class,
             'converter' => PhpLintConvertToSubset::class,
         ],
-        'PHPMD' => [
-            'validator' => PhpMDJsonValidator::class,
-            'converter' => PhpMDConvertToSubset::class
-        ],
         'PHPStan' => [
             'validator' => PHPStanJsonValidator::class,
             'converter' => PHPStanConvertToSubset::class,
         ],
         'Psalm' => [
             'validator' => PsalmJsonValidator::class,
-            'converter' => PsalmConvertToSubset::class
+            'converter' => PsalmConvertToSubset::class,
         ],
     ];
 
@@ -65,37 +61,9 @@ class ConverterCommand extends Command
         );
     }
 
-    private function option(string $converter): void
-    {
-        $this->addOption(
-            strtolower($converter),
-            null,
-            InputOption::VALUE_OPTIONAL,
-            sprintf(
-                'Include %s converter',
-                $converter
-            ),
-            false
-        );
-
-        $this->addOption(
-            sprintf(
-                '%s-json-file',
-                strtolower($converter)
-            ),
-            null,
-            InputOption::VALUE_OPTIONAL,
-            'Location to JSON file',
-            sprintf(
-                '%s.json',
-                strtolower($converter)
-            )
-        );
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $converter = new Converter;
+        $converter = new Converter();
 
         foreach (static::$supportedConverters as $converterName => $supportedConverter) {
             if (false !== $input->getOption(strtolower($converterName))) {
@@ -148,5 +116,33 @@ class ConverterCommand extends Command
         }
 
         return 1;
+    }
+
+    private function option(string $converter): void
+    {
+        $this->addOption(
+            strtolower($converter),
+            null,
+            InputOption::VALUE_OPTIONAL,
+            sprintf(
+                'Include %s converter',
+                $converter
+            ),
+            false
+        );
+
+        $this->addOption(
+            sprintf(
+                '%s-json-file',
+                strtolower($converter)
+            ),
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'Location to JSON file',
+            sprintf(
+                '%s.json',
+                strtolower($converter)
+            )
+        );
     }
 }

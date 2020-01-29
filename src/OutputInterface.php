@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BeechIt\JsonToCodeClimateSubsetConverter;
-
 
 interface OutputInterface
 {
