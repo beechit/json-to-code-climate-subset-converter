@@ -8,12 +8,17 @@ use BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer\PhpCodeSnifferConve
 use BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer\PhpCodeSnifferJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPLint\PhpLintConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPLint\PhpLintJsonValidator;
-use BeechIt\JsonToCodeClimateSubsetConverter\PHPMD\PhpMDConvertToSubset;
-use BeechIt\JsonToCodeClimateSubsetConverter\PHPMD\PhpMDJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmJsonValidator;
+use Safe\Exceptions\FilesystemException;
+use Safe\Exceptions\JsonException;
+use Safe\Exceptions\StringsException;
+use function Safe\file_get_contents;
+use function Safe\file_put_contents;
+use function Safe\json_decode;
+use function Safe\sprintf;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -21,8 +26,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ConverterCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected static $defaultName = 'convert';
 
+    /**
+     * @var array
+     */
     private static $supportedConverters = [
         'Phan' => [
             'validator' => PhanJsonValidator::class,
@@ -46,10 +57,14 @@ class ConverterCommand extends Command
         ],
     ];
 
-    protected function configure()
+    protected function configure(): void
     {
         foreach (static::$supportedConverters as $converterName => $converter) {
-            $this->option($converterName);
+            try {
+                $this->option($converterName);
+            } catch (UnableToAddOption $exception) {
+                exit();
+            }
         }
 
         $this->addOption(
@@ -67,41 +82,71 @@ class ConverterCommand extends Command
 
         foreach (static::$supportedConverters as $converterName => $supportedConverter) {
             if (false !== $input->getOption(strtolower($converterName))) {
-                $filename = $input->getOption(
-                    sprintf(
-                        '%s-json-file',
-                        strtolower($converterName)
-                    )
-                );
+                try {
+                    /** @var string $filename */
+                    $filename = $input->getOption(
+                        sprintf(
+                            '%s-json-file',
+                            strtolower($converterName)
+                        )
+                    );
+                } catch (StringsException $exception) {
+                    throw new UnableToCreateFilenameException(
+                        $exception->getMessage()
+                    );
+                }
 
-                $output->writeln(
-                    sprintf(
-                        '<comment>Converting %s via %s</comment>',
-                        $converterName,
-                        $filename
-                    )
-                );
+                try {
+                    $output->writeln(
+                        sprintf(
+                            '<comment>Converting %s via %s</comment>',
+                            $converterName,
+                            $filename
+                        )
+                    );
+                } catch (StringsException $exception) {
+                    throw new UnableToWriteOutputLine(
+                        $exception->getMessage()
+                    );
+                }
 
-                $jsonInput = file_get_contents($filename);
-                $jsonDecodedInput = json_decode($jsonInput);
+                try {
+                    $jsonInput = file_get_contents($filename);
 
-                /**
-                 * @var AbstractJsonValidator $validator
-                 */
-                $validator = new $supportedConverter['validator']($jsonDecodedInput);
+                    $jsonDecodedInput = json_decode($jsonInput);
 
-                /**
-                 * AbstractConverter $converterImplementation
-                 */
-                $converterImplementation = new $supportedConverter['converter']($validator, $jsonDecodedInput);
+                    /**
+                     * @var AbstractJsonValidator
+                     */
+                    $validator = new $supportedConverter['validator']($jsonDecodedInput);
 
-                $converter->addConverter($converterImplementation);
+                    /**
+                     * AbstractConverter $converterImplementation.
+                     */
+                    $converterImplementation = new $supportedConverter['converter']($validator, $jsonDecodedInput);
+
+                    $converter->addConverter($converterImplementation);
+                } catch (FilesystemException $exception) {
+                    $output->writeln(
+                        sprintf(
+                            '<error>Unable to find %s.</error>',
+                            $filename
+                        )
+                    );
+                } catch (JsonException $exception) {
+                    $output->writeln('<error>Unable to decode given file.</error>');
+                } catch (StringsException $exception) {
+                    throw new UnableToWriteOutputLine(
+                        $exception->getMessage()
+                    );
+                }
             }
         }
 
         try {
             $converter->convertToSubset();
 
+            /** @var string $outputFilename */
             $outputFilename = $input->getOption('output');
 
             $output->writeln(
@@ -117,6 +162,14 @@ class ConverterCommand extends Command
             );
         } catch (NoConvertersEnabledException $exception) {
             $output->writeln('<error>Please include at least 1 converter.</error>');
+        } catch (FilesystemException $exception) {
+            $output->writeln('<error>Unable to write to output file.</error>');
+        } catch (StringsException $exception) {
+            throw new UnableToWriteOutputLine(
+                $exception->getMessage()
+            );
+        } catch (UnableToGetJsonEncodedOutputException $exception) {
+            $output->writeln('<error>Unable to get JSON encoded output.</error>');
         }
 
         return 1;
@@ -124,29 +177,41 @@ class ConverterCommand extends Command
 
     private function option(string $converter): void
     {
-        $this->addOption(
-            strtolower($converter),
-            null,
-            InputOption::VALUE_OPTIONAL,
-            sprintf(
-                'Include %s converter',
-                $converter
-            ),
-            false
-        );
+        try {
+            $this->addOption(
+                strtolower($converter),
+                null,
+                InputOption::VALUE_OPTIONAL,
+                sprintf(
+                    'Include %s converter',
+                    $converter
+                ),
+                false
+            );
+        } catch (StringsException $exception) {
+            throw new UnableToAddOption(
+                $exception->getMessage()
+            );
+        }
 
-        $this->addOption(
-            sprintf(
-                '%s-json-file',
-                strtolower($converter)
-            ),
-            null,
-            InputOption::VALUE_OPTIONAL,
-            'Location to JSON file',
-            sprintf(
-                '%s.json',
-                strtolower($converter)
-            )
-        );
+        try {
+            $this->addOption(
+                sprintf(
+                    '%s-json-file',
+                    strtolower($converter)
+                ),
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Location to JSON file',
+                sprintf(
+                    '%s.json',
+                    strtolower($converter)
+                )
+            );
+        } catch (StringsException $exception) {
+            throw new UnableToAddOption(
+                $exception->getMessage()
+            );
+        }
     }
 }
