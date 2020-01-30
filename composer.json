@@ -57,8 +57,6 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
         "phpunit": "vendor/bin/phpunit",
         "phpstan": "vendor/bin/phpstan analyse src --level max",
         "psalm": "vendor/bin/psalm src",
