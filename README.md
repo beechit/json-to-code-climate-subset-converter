@@ -17,6 +17,7 @@ Please note this project is actively worked on but it's not ready for production
   - [x] [phpcs](https://github.com/squizlabs/PHP_CodeSniffer)
   - [ ] [phpmd](https://github.com/phpmd/phpmd)
   - [x] [phplint](https://github.com/overtrue/phplint)
+- [ ] Add official docker image
 
 ## Supported JSON files
 
@@ -100,6 +101,20 @@ If you're working on a project that supports multiple tools, you're free to add 
 ```sh
 php converter convert --phpstan --psalm --phpcs
 ```
+
+## Running the CLI command in Docker
+
+### To build the docker image:
+```shell
+docker build -t converter .
+```
+
+### To use the image to convert
+```shell
+docker run --rm -t -v $(pwd):/project -w /project converter convert --phpstan
+```
+This will mount the current directory in the container under `/project`, and execute the converter.
+This will also remove the container after use.
 
 ## JSON output
 
