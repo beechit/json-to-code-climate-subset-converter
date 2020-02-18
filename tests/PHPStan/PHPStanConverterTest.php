@@ -20,8 +20,6 @@ class PHPStanConverterTest extends TestCase
         $converter->convertToSubset();
 
         // Then
-        var_dump($converter);
-
         $this->assertEquals([], $converter->getOutput());
     }
 
