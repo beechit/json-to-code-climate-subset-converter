@@ -8,6 +8,23 @@ use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanConvertToSubset;
 
 class PHPStanConverterTest extends TestCase
 {
+    public function test_it_can_convert_php_stan_succesful_json_to_subset(): void
+    {
+        // Given
+        $jsonInput = file_get_contents(__DIR__ . '/fixtures/empty.json');
+        $jsonDecodedInput = json_decode($jsonInput);
+
+        // When
+        $validator = new PHPStanJsonValidator($jsonDecodedInput);
+        $converter = new PHPStanConvertToSubset($validator, $jsonDecodedInput);
+        $converter->convertToSubset();
+
+        // Then
+        var_dump($converter);
+
+        $this->assertEquals([], $converter->getOutput());
+    }
+
     public function test_it_can_convert_php_stan_json_to_subset(): void
     {
         // Given

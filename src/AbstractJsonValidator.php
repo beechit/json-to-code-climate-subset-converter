@@ -5,9 +5,9 @@ namespace BeechIt\JsonToCodeClimateSubsetConverter;
 abstract class AbstractJsonValidator implements JsonValidatorInterface
 {
     /**
-     * @var mixed
+     * @var array
      */
-    protected $json;
+    protected $json = [];
 
     /**
      * AbstractJsonValidator constructor.
