@@ -22,7 +22,7 @@ abstract class AbstractConverter implements OutputInterface, ConvertToSubsetInte
     /**
      * @var array
      */
-    protected $codeClimateNodes;
+    protected $codeClimateNodes = [];
 
     /**
      * AbstractConverter constructor.
