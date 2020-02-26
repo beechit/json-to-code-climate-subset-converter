@@ -76,9 +76,10 @@ class ConverterCommand extends Command
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $converter = new Converter();
+        $exitCode = 0;
 
         foreach (static::$supportedConverters as $converterName => $supportedConverter) {
             if (false !== $input->getOption(strtolower($converterName))) {
@@ -133,8 +134,10 @@ class ConverterCommand extends Command
                             $filename
                         )
                     );
+                    $exitCode = 1;
                 } catch (JsonException $exception) {
                     $output->writeln('<error>Unable to decode given file.</error>');
+                    $exitCode = 1;
                 } catch (StringsException $exception) {
                     throw new UnableToWriteOutputLine(
                         $exception->getMessage()
@@ -162,17 +165,20 @@ class ConverterCommand extends Command
             );
         } catch (NoConvertersEnabledException $exception) {
             $output->writeln('<error>Please include at least 1 converter.</error>');
+            $exitCode = 1;
         } catch (FilesystemException $exception) {
             $output->writeln('<error>Unable to write to output file.</error>');
+            $exitCode = 1;
         } catch (StringsException $exception) {
             throw new UnableToWriteOutputLine(
                 $exception->getMessage()
             );
         } catch (UnableToGetJsonEncodedOutputException $exception) {
             $output->writeln('<error>Unable to get JSON encoded output.</error>');
+            return 1;
         }
 
-        return 1;
+        return $exitCode;
     }
 
     private function option(string $converter): void
