@@ -26,5 +26,8 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
 
+    - name: Test Actions error printer
+      run: echo "::error app/Class.php,2::(Psalm) Property Illuminate\Foundation\Console\Kernel::$artisan is not defined in constructor of App\Console\Kernel and in any methods called in the constructor"
+
     - name: Run Psalm
       run: composer psalm
