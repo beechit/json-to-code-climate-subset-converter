@@ -1,7 +1,24 @@
 #!/usr/bin/env php
 <?php
 
-require __DIR__.'/vendor/autoload.php';
+$loaded = false;
+
+$autoloadFiles = [
+    __DIR__ . '/vendor/autoload.php',
+    __DIR__ . '/../../vendor/autoload.php',
+];
+
+foreach ($autoloadFiles as $autoloadFile) {
+    if (file_exists($autoloadFile)) {
+        require $autoloadFile;
+        $loaded = true;
+        break;
+    }
+}
+
+if (! $loaded) {
+    die('Can not find autoload.php file.');
+}
 
 use Symfony\Component\Console\Application;
 use BeechIt\JsonToCodeClimateSubsetConverter\ConverterCommand;
