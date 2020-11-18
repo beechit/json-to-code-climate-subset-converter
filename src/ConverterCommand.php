@@ -15,10 +15,12 @@ use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmJsonValidator;
 use Safe\Exceptions\FilesystemException;
 use Safe\Exceptions\JsonException;
 use Safe\Exceptions\StringsException;
+
 use function Safe\file_get_contents;
 use function Safe\file_put_contents;
 use function Safe\json_decode;
 use function Safe\sprintf;
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -175,6 +177,7 @@ class ConverterCommand extends Command
             );
         } catch (UnableToGetJsonEncodedOutputException $exception) {
             $output->writeln('<error>Unable to get JSON encoded output.</error>');
+
             return 1;
         }
 

@@ -4,6 +4,7 @@ namespace BeechIt\JsonToCodeClimateSubsetConverter;
 
 use Safe\Exceptions\JsonException;
 use Safe\Exceptions\StringsException;
+
 use function Safe\json_encode;
 use function Safe\sprintf;
 
