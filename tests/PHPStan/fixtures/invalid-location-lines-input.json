@@ -3,7 +3,7 @@
         "description": "Return type (array) of method App\\Class::processNode() should be covariant with return type (array<PHPStan\\Rules\\RuleError|string>) of method PHPStan\\Rules\\Rule::processNode()",
         "fingerprint": "fb3f3ad4440725c7fd72811f0e284e2b307dc2d94bf45a55d03c0620c0079ac5",
         "location": {
-            "path": "/var/www/html/app/Class.php"
+            "path": "/app/Class.php"
         }
     }
 ]

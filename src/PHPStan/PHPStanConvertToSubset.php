@@ -13,20 +13,15 @@ final class PHPStanConvertToSubset extends AbstractConverter
             $this->abstractJsonValidator->validateJson();
 
             foreach ($this->json as $node) {
-                /**
-                 * @see https://github.com/phpstan/phpstan/issues/2652
-                 */
-                $filename = str_replace('/var/www/html/', '', $node->location->path);
-
                 $this->codeClimateNodes[] = [
                     'description' => $this->createDescription($node->description),
                     'fingerprint' => $this->createFingerprint(
                         $node->description,
-                        $filename,
+                        $node->location->path,
                         $node->location->lines->begin
                     ),
                     'location' => [
-                        'path' => $filename,
+                        'path' => $node->location->path,
                         'lines' => [
                             'begin' => $node->location->lines->begin,
                         ],
