@@ -14,6 +14,7 @@
     "errors": {
         "\/var\/www\/html\/app\/DisallowTraitsInNamespace.php": {
             "file": "\/var\/www\/html\/app\/Class.php",
+            "file_name": "app\/Class.php",
             "error": "unexpected 'public' (T_PUBLIC), expecting ',' or ';' in line 2",
             "line": 2
         }

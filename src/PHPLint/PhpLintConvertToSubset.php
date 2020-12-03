@@ -13,20 +13,15 @@ final class PhpLintConvertToSubset extends AbstractConverter
             $this->abstractJsonValidator->validateJson();
 
             foreach ($this->json->errors as $node) {
-                /**
-                 * @see https://github.com/overtrue/phplint/issues/63
-                 */
-                $filename = str_replace('/var/www/html/', '', $node->file);
-
                 $this->codeClimateNodes[] = [
                     'description' => $this->createDescription($node->error),
                     'fingerprint' => $this->createFingerprint(
                         $node->error,
-                        $filename,
+                        $node->file_name,
                         $node->line
                     ),
                     'location' => [
-                        'path' => $filename,
+                        'path' => $node->file_name,
                         'lines' => [
                             'begin' => $node->line,
                         ],
