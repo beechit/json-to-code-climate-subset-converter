@@ -39,6 +39,7 @@
         "phpstan/phpstan": "^0.12.7",
         "phpunit/phpunit": "^8.0",
         "rector/rector": "^0.6.13",
+        "rregeer/phpunit-coverage-check": "^0.3.1",
         "squizlabs/php_codesniffer": "^3.5",
         "thecodingmachine/phpstan-safe-rule": "^1.0",
         "vimeo/psalm": "^3.8"
@@ -61,7 +62,7 @@
         "phpstan": "vendor/bin/phpstan analyse src --level max",
         "psalm": "vendor/bin/psalm src",
         "phplint": "vendor/bin/phplint src",
-        "php-cs-fixer": "vendor/bin/php-cs-fixer fix src",
+        "php-cs-fixer": "vendor/bin/php-cs-fixer fix",
         "php-cbf": "vendor/bin/phpcbf src --standard=PSR1,PSR2,PSR12",
         "php-cs": "vendor/bin/phpcs src --standard=PSR1,PSR2,PSR12",
         "phan": "vendor/bin/phan --allow-polyfill-parser src",
