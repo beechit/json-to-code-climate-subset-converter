@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BeechIt\JsonToCodeClimateSubsetConverter\PHPStan;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractConverter;
@@ -33,7 +35,7 @@ final class PHPStanConvertToSubset extends AbstractConverter
         }
     }
 
-    protected function getToolName(): string
+    public function getToolName(): string
     {
         return 'PHPStan';
     }

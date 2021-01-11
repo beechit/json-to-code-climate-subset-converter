@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BeechIt\JsonToCodeClimateSubsetConverter\PHPLint;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractConverter;
@@ -33,7 +35,7 @@ final class PhpLintConvertToSubset extends AbstractConverter
         }
     }
 
-    protected function getToolName(): string
+    public function getToolName(): string
     {
         return 'PHPLint';
     }

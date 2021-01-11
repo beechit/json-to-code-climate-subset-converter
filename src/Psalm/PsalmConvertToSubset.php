@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Psalm;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractConverter;
@@ -34,7 +36,7 @@ final class PsalmConvertToSubset extends AbstractConverter
         }
     }
 
-    protected function getToolName(): string
+    public function getToolName(): string
     {
         return 'Psalm';
     }

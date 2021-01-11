@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractConverter;
@@ -35,7 +37,7 @@ final class PhpCodeSnifferConvertToSubset extends AbstractConverter
         }
     }
 
-    protected function getToolName(): string
+    public function getToolName(): string
     {
         return 'PHP_CodeSniffer';
     }

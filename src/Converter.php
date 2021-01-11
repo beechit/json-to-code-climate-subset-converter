@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BeechIt\JsonToCodeClimateSubsetConverter;
 
 use Safe\Exceptions\JsonException;
-
 use function Safe\json_encode;
 
 class Converter implements ConvertToSubsetInterface, OutputInterface

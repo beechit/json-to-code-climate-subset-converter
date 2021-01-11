@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BeechIt\JsonToCodeClimateSubsetConverter;
 
 use Safe\Exceptions\JsonException;
 use Safe\Exceptions\StringsException;
-
 use function Safe\json_encode;
 use function Safe\sprintf;
 
@@ -58,12 +59,12 @@ abstract class AbstractConverter implements OutputInterface, ConvertToSubsetInte
 
     abstract public function convertToSubset(): void;
 
-    abstract protected function getToolName(): string;
+    abstract public function getToolName(): string;
 
     protected function createFingerprint(
         string $description,
         string $filename,
-        string $line
+        int $line
     ): string {
         try {
             return md5(

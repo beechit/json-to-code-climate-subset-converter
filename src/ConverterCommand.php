@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BeechIt\JsonToCodeClimateSubsetConverter;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanConvertToSubset;
@@ -12,15 +14,14 @@ use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmJsonValidator;
+use function file_exists;
 use Safe\Exceptions\FilesystemException;
 use Safe\Exceptions\JsonException;
 use Safe\Exceptions\StringsException;
-
 use function Safe\file_get_contents;
 use function Safe\file_put_contents;
 use function Safe\json_decode;
 use function Safe\sprintf;
-
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -28,6 +29,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ConverterCommand extends Command
 {
+    const EXIT_NO_ERRORS = 0;
+    const EXIT_NO_FILE_FOUND = 1;
+    const EXIT_UNABLE_TO_DECODE_FILE = 2;
+    const EXIT_NO_CONVERTER_INCLUDED = 3;
+    const EXIT_UNABLE_TO_WRITE_FILE = 4;
+    const EXIT_UNABLE_TO_GET_ENCODED_OUTPUT = 5;
+
     /**
      * @var string
      */
@@ -81,8 +89,12 @@ class ConverterCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $converter = new Converter();
-        $exitCode = 0;
+        $exitCode = self::EXIT_NO_ERRORS;
 
+        /**
+         * @var string $converterName
+         * @var string $supportedConverter
+         */
         foreach (static::$supportedConverters as $converterName => $supportedConverter) {
             if (false !== $input->getOption(strtolower($converterName))) {
                 try {
@@ -102,7 +114,7 @@ class ConverterCommand extends Command
                 try {
                     $output->writeln(
                         sprintf(
-                            '<comment>Converting %s via %s</comment>',
+                            '<comment>Converting %s via %s.</comment>',
                             $converterName,
                             $filename
                         )
@@ -111,6 +123,18 @@ class ConverterCommand extends Command
                     throw new UnableToWriteOutputLine(
                         $exception->getMessage()
                     );
+                }
+
+                if (!file_exists($filename)) {
+                    $output->writeln(
+                        sprintf(
+                            '<error>Unable to find %s. See error code %d.</error>',
+                            $filename,
+                            self::EXIT_NO_FILE_FOUND
+                        )
+                    );
+
+                    return self::EXIT_NO_FILE_FOUND;
                 }
 
                 try {
@@ -129,21 +153,16 @@ class ConverterCommand extends Command
                     $converterImplementation = new $supportedConverter['converter']($validator, $jsonDecodedInput);
 
                     $converter->addConverter($converterImplementation);
-                } catch (FilesystemException $exception) {
+                } catch (JsonException $exception) {
                     $output->writeln(
                         sprintf(
-                            '<error>Unable to find %s.</error>',
-                            $filename
+                            '<error>Unable to decode %s. See error code %d.</error>',
+                            $filename,
+                            self::EXIT_UNABLE_TO_DECODE_FILE
                         )
                     );
-                    $exitCode = 1;
-                } catch (JsonException $exception) {
-                    $output->writeln('<error>Unable to decode given file.</error>');
-                    $exitCode = 1;
-                } catch (StringsException $exception) {
-                    throw new UnableToWriteOutputLine(
-                        $exception->getMessage()
-                    );
+
+                    return self::EXIT_UNABLE_TO_DECODE_FILE;
                 }
             }
         }
@@ -156,7 +175,7 @@ class ConverterCommand extends Command
 
             $output->writeln(
                 sprintf(
-                    '<info>Writing output to %s</info>',
+                    '<info>Writing output to %s.</info>',
                     $outputFilename
                 )
             );
@@ -166,19 +185,36 @@ class ConverterCommand extends Command
                 $converter->getJsonEncodedOutput()
             );
         } catch (NoConvertersEnabledException $exception) {
-            $output->writeln('<error>Please include at least 1 converter.</error>');
-            $exitCode = 1;
+            $output->writeln(
+                sprintf(
+                    '<error>Please include at least 1 converter. See error code %d.</error>',
+                    self::EXIT_NO_CONVERTER_INCLUDED
+                )
+            );
+
+            return self::EXIT_NO_CONVERTER_INCLUDED;
         } catch (FilesystemException $exception) {
-            $output->writeln('<error>Unable to write to output file.</error>');
-            $exitCode = 1;
+            $output->writeln(
+                sprintf(
+                    '<error>Unable to write to output file. See error code %d.</error>',
+                    self::EXIT_UNABLE_TO_WRITE_FILE
+                )
+            );
+
+            return self::EXIT_UNABLE_TO_WRITE_FILE;
         } catch (StringsException $exception) {
             throw new UnableToWriteOutputLine(
                 $exception->getMessage()
             );
         } catch (UnableToGetJsonEncodedOutputException $exception) {
-            $output->writeln('<error>Unable to get JSON encoded output.</error>');
+            $output->writeln(
+                sprintf(
+                    '<error>Unable to get JSON encoded output. See error code %d.</error>',
+                    self::EXIT_UNABLE_TO_GET_ENCODED_OUTPUT
+                )
+            );
 
-            return 1;
+            return self::EXIT_UNABLE_TO_WRITE_FILE;
         }
 
         return $exitCode;

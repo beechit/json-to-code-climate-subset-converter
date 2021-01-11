@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BeechIt\JsonToCodeClimateSubsetConverter\PHPLint;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractJsonValidator;
