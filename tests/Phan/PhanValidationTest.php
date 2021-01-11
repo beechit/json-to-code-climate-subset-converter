@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\Phan;
 
-use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
 use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
-use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanConvertToSubset;
+use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanJsonValidator;
+use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
 
+/**
+ * @internal
+ */
 class PhanValidationTest extends TestCase
 {
-    public function test_it_throws_an_exception_when_description_property_is_missing()
+    public function testItThrowsAnExceptionWhenDescriptionPropertyIsMissing()
     {
         $this->expectException(InvalidJsonException::class);
         $this->expectErrorMessage('The [description] is a required property');
 
         // Given
-        $jsonInput = file_get_contents(__DIR__ . '/fixtures/invalid-description-input.json');
+        $jsonInput = file_get_contents(__DIR__.'/fixtures/invalid-description-input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
         // When
@@ -24,13 +29,13 @@ class PhanValidationTest extends TestCase
         $converter->convertToSubset();
     }
 
-    public function test_it_throws_an_exception_when_location_property_is_missing()
+    public function testItThrowsAnExceptionWhenLocationPropertyIsMissing()
     {
         $this->expectException(InvalidJsonException::class);
         $this->expectErrorMessage('The [location] is a required property');
 
         // Given
-        $jsonInput = file_get_contents(__DIR__ . '/fixtures/invalid-location-input.json');
+        $jsonInput = file_get_contents(__DIR__.'/fixtures/invalid-location-input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
         // When
@@ -39,13 +44,13 @@ class PhanValidationTest extends TestCase
         $converter->convertToSubset();
     }
 
-    public function test_it_throws_an_exception_when_location_path_property_is_missing()
+    public function testItThrowsAnExceptionWhenLocationPathPropertyIsMissing()
     {
         $this->expectException(InvalidJsonException::class);
         $this->expectErrorMessage('The [location.path] is a required property');
 
         // Given
-        $jsonInput = file_get_contents(__DIR__ . '/fixtures/invalid-location-path-input.json');
+        $jsonInput = file_get_contents(__DIR__.'/fixtures/invalid-location-path-input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
         // When
@@ -54,13 +59,13 @@ class PhanValidationTest extends TestCase
         $converter->convertToSubset();
     }
 
-    public function test_it_throws_an_exception_when_location_lines_property_is_missing()
+    public function testItThrowsAnExceptionWhenLocationLinesPropertyIsMissing()
     {
         $this->expectException(InvalidJsonException::class);
         $this->expectErrorMessage('The [location.lines] is a required property');
 
         // Given
-        $jsonInput = file_get_contents(__DIR__ . '/fixtures/invalid-location-lines-input.json');
+        $jsonInput = file_get_contents(__DIR__.'/fixtures/invalid-location-lines-input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
         // When
@@ -69,13 +74,13 @@ class PhanValidationTest extends TestCase
         $converter->convertToSubset();
     }
 
-    public function test_it_throws_an_exception_when_location_lines_begin_property_is_missing()
+    public function testItThrowsAnExceptionWhenLocationLinesBeginPropertyIsMissing()
     {
         $this->expectException(InvalidJsonException::class);
         $this->expectErrorMessage('The [location.lines.begin] is a required property');
 
         // Given
-        $jsonInput = file_get_contents(__DIR__ . '/fixtures/invalid-location-lines-begin-input.json');
+        $jsonInput = file_get_contents(__DIR__.'/fixtures/invalid-location-lines-begin-input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
         // When

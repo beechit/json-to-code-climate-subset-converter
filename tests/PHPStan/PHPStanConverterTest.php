@@ -1,17 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\PHPStan;
 
+use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
-use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanConvertToSubset;
 
+/**
+ * @internal
+ */
 class PHPStanConverterTest extends TestCase
 {
-    public function test_it_can_convert_php_stan_succesful_json_to_subset(): void
+    public function testItCanConvertPhpStanSuccesfulJsonToSubset(): void
     {
         // Given
-        $jsonInput = file_get_contents(__DIR__ . '/fixtures/empty.json');
+        $jsonInput = file_get_contents(__DIR__.'/fixtures/empty.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
         // When
@@ -23,10 +28,10 @@ class PHPStanConverterTest extends TestCase
         $this->assertEquals([], $converter->getOutput());
     }
 
-    public function test_it_can_convert_php_stan_json_to_subset(): void
+    public function testItCanConvertPhpStanJsonToSubset(): void
     {
         // Given
-        $jsonInput = file_get_contents(__DIR__ . '/fixtures/input.json');
+        $jsonInput = file_get_contents(__DIR__.'/fixtures/input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
         // When
@@ -46,19 +51,19 @@ class PHPStanConverterTest extends TestCase
                             'begin' => 2,
                         ],
                     ],
-                ]
+                ],
             ],
             $converter->getOutput()
         );
     }
 
-    public function test_it_can_convert_php_stan_json_to_json_subset(): void
+    public function testItCanConvertPhpStanJsonToJsonSubset(): void
     {
         // Given
-        $jsonInput = file_get_contents(__DIR__ . '/fixtures/input.json');
+        $jsonInput = file_get_contents(__DIR__.'/fixtures/input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
-        $jsonOutput = file_get_contents(__DIR__ . '/fixtures/output.json');
+        $jsonOutput = file_get_contents(__DIR__.'/fixtures/output.json');
 
         // When
         $validator = new PHPStanJsonValidator($jsonDecodedInput);

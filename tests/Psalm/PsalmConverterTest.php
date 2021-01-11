@@ -1,17 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\Psalm;
 
+use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
-use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmConvertToSubset;
 
+/**
+ * @internal
+ */
 class PsalmConverterTest extends TestCase
 {
-    public function test_it_can_convert_psalm_json_to_subset(): void
+    public function testItCanConvertPsalmJsonToSubset(): void
     {
         // Given
-        $jsonInput = file_get_contents(__DIR__ . '/fixtures/input.json');
+        $jsonInput = file_get_contents(__DIR__.'/fixtures/input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
         // When
@@ -32,19 +37,19 @@ class PsalmConverterTest extends TestCase
                             'end' => 2,
                         ],
                     ],
-                ]
+                ],
             ],
             $converter->getOutput()
         );
     }
 
-    public function test_it_can_convert_psalm_json_to_json_subset(): void
+    public function testItCanConvertPsalmJsonToJsonSubset(): void
     {
         // Given
-        $jsonInput = file_get_contents(__DIR__ . '/fixtures/input.json');
+        $jsonInput = file_get_contents(__DIR__.'/fixtures/input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
-        $jsonOutput = file_get_contents(__DIR__ . '/fixtures/output.json');
+        $jsonOutput = file_get_contents(__DIR__.'/fixtures/output.json');
 
         // When
         $validator = new PsalmJsonValidator($jsonDecodedInput);

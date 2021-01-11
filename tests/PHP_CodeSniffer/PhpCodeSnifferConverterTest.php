@@ -1,17 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\PHP_CodeSniffer;
 
+use BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer\PhpCodeSnifferConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer\PhpCodeSnifferJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
-use BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer\PhpCodeSnifferConvertToSubset;
 
+/**
+ * @internal
+ */
 class PhpCodeSnifferConverterTest extends TestCase
 {
-    public function test_it_can_convert_php_code_sniffer_json_to_subset(): void
+    public function testItCanConvertPhpCodeSnifferJsonToSubset(): void
     {
         // Given
-        $jsonInput = file_get_contents(__DIR__ . '/fixtures/input.json');
+        $jsonInput = file_get_contents(__DIR__.'/fixtures/input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
         // When
@@ -31,19 +36,19 @@ class PhpCodeSnifferConverterTest extends TestCase
                             'begin' => 2,
                         ],
                     ],
-                ]
+                ],
             ],
             $converter->getOutput()
         );
     }
 
-    public function test_it_can_convert_php_code_sniffer_json_to_json_subset(): void
+    public function testItCanConvertPhpCodeSnifferJsonToJsonSubset(): void
     {
         // Given
-        $jsonInput = file_get_contents(__DIR__ . '/fixtures/input.json');
+        $jsonInput = file_get_contents(__DIR__.'/fixtures/input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
-        $jsonOutput = file_get_contents(__DIR__ . '/fixtures/output.json');
+        $jsonOutput = file_get_contents(__DIR__.'/fixtures/output.json');
 
         // When
         $validator = new PhpCodeSnifferJsonValidator($jsonDecodedInput);

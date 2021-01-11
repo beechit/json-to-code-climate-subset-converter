@@ -1,17 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\PHPLint;
 
+use BeechIt\JsonToCodeClimateSubsetConverter\PHPLint\PhpLintConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPLint\PhpLintJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
-use BeechIt\JsonToCodeClimateSubsetConverter\PHPLint\PhpLintConvertToSubset;
 
+/**
+ * @internal
+ */
 class PhpLintConverterTest extends TestCase
 {
-    public function test_it_can_convert_php_lint_json_to_subset(): void
+    public function testItCanConvertPhpLintJsonToSubset(): void
     {
         // Given
-        $jsonInput = file_get_contents(__DIR__ . '/fixtures/input.json');
+        $jsonInput = file_get_contents(__DIR__.'/fixtures/input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
         // When
@@ -31,19 +36,19 @@ class PhpLintConverterTest extends TestCase
                             'begin' => 2,
                         ],
                     ],
-                ]
+                ],
             ],
             $converter->getOutput()
         );
     }
 
-    public function test_it_can_convert_php_lint_json_to_json_subset(): void
+    public function testItCanConvertPhpLintJsonToJsonSubset(): void
     {
         // Given
-        $jsonInput = file_get_contents(__DIR__ . '/fixtures/input.json');
+        $jsonInput = file_get_contents(__DIR__.'/fixtures/input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
-        $jsonOutput = file_get_contents(__DIR__ . '/fixtures/output.json');
+        $jsonOutput = file_get_contents(__DIR__.'/fixtures/output.json');
 
         // When
         $validator = new PhpLintJsonValidator($jsonDecodedInput);
