@@ -36,6 +36,7 @@
         "friendsofphp/php-cs-fixer": "^2.16",
         "overtrue/phplint": "^1.2",
         "phan/phan": "^2.4",
+        "php-mock/php-mock-phpunit": "^2.6",
         "phpstan/phpstan": "^0.12.7",
         "phpunit/phpunit": "^8.0",
         "rector/rector": "^0.6.13",

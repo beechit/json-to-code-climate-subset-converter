@@ -6,6 +6,7 @@ namespace BeechIt\JsonToCodeClimateSubsetConverter;
 
 use Safe\Exceptions\JsonException;
 use Safe\Exceptions\StringsException;
+use function dump;
 use function Safe\json_encode;
 use function Safe\sprintf;
 
@@ -45,12 +46,15 @@ abstract class AbstractConverter implements OutputInterface, ConvertToSubsetInte
 
     public function getJsonEncodedOutput(): string
     {
+        dump('hello world');
         try {
+            dump('hello world 2');
             return json_encode(
-                $this->getOutput(),
+                $a = [&$a],
                 JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
             );
         } catch (JsonException $exception) {
+            dump('hello world 3');
             throw new UnableToGetJsonEncodedOutputException(
                 $exception->getMessage()
             );

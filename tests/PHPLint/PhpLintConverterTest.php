@@ -7,12 +7,19 @@ namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\PHPLint;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPLint\PhpLintConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPLint\PhpLintJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
+use BeechIt\JsonToCodeClimateSubsetConverter\UnableToGetJsonEncodedOutputException;
+use phpmock\phpunit\PHPMock;
+use Safe\Exceptions\JsonException;
+use function file_get_contents;
+use function json_decode;
 
 /**
  * @internal
  */
 class PhpLintConverterTest extends TestCase
 {
+    use PHPMock;
+
     public function testItCanConvertPhpLintJsonToSubset(): void
     {
         // Given
@@ -60,5 +67,18 @@ class PhpLintConverterTest extends TestCase
             $jsonOutput,
             $converter->getJsonEncodedOutput()
         );
+    }
+
+    public function testItCanThrowAnExceptionWhenConvertingPhpLintJsonToJsonSubsetFails(): void
+    {
+        $this->expectException(UnableToGetJsonEncodedOutputException::class);
+
+        $converter = $this->getMockBuilder(PhpLintConvertToSubset::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $converter->method('getOutput')->willReturn($a = [&$a]);
+
+        $converter->getJsonEncodedOutput();
     }
 }

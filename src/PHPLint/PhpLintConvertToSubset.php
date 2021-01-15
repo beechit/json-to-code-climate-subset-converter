@@ -7,7 +7,7 @@ namespace BeechIt\JsonToCodeClimateSubsetConverter\PHPLint;
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractConverter;
 use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
 
-final class PhpLintConvertToSubset extends AbstractConverter
+class PhpLintConvertToSubset extends AbstractConverter
 {
     public function convertToSubset(): void
     {
