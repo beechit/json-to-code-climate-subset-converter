@@ -12,6 +12,9 @@ return PhpCsFixer\Config::create()
         '@PhpCsFixer' => true,
         'declare_strict_types' => true,
         'php_unit_test_class_requires_covers' => false,
+        'multiline_whitespace_before_semicolons' => [
+            'strategy' => 'no_multi_line',
+        ],
     ])
     ->setFinder(PhpCsFixer\Finder::create()
         ->exclude('vendor')
