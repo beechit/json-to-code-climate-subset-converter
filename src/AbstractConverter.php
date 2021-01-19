@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter;
 
-use BeechIt\JsonToCodeClimateSubsetConverter\Utilities\JsonEncode;
-use function dump;
 use Safe\Exceptions\JsonException;
 use Safe\Exceptions\StringsException;
+use function json_encode;
 use function Safe\sprintf;
 
 abstract class AbstractConverter implements OutputInterface, ConvertToSubsetInterface
 {
-    use JsonEncode;
-
     /**
      * @var AbstractJsonValidator
      */
@@ -50,7 +47,7 @@ abstract class AbstractConverter implements OutputInterface, ConvertToSubsetInte
     public function getJsonEncodedOutput(): string
     {
         try {
-            return $this->jsonEncode(
+            return json_encode(
                 $this->getOutput(),
                 JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
             );

@@ -69,16 +69,4 @@ class PhpLintConverterTest extends TestCase
             $converter->getJsonEncodedOutput()
         );
     }
-
-    public function testItCanThrowAnExceptionWhenConvertingPhpLintJsonToJsonSubsetFails(): void
-    {
-        $this->expectException(UnableToGetJsonEncodedOutputException::class);
-
-        $converter = $this->createMock(PhpLintConvertToSubset::class);
-
-        $converter->method('jsonEncode')
-            ->willThrowException(new JsonException());
-
-        $converter->getJsonEncodedOutput();
-    }
 }
