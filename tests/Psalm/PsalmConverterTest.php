@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\Psalm;
 
+use BeechIt\JsonToCodeClimateSubsetConverter\AbstractJsonValidator;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ConverterFactory;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ValidatorFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
@@ -51,15 +54,31 @@ class PsalmConverterTest extends TestCase
 
         $jsonOutput = file_get_contents(__DIR__.'/fixtures/output.json');
 
+        $validatorFactory = new ValidatorFactory();
+
+        /**
+         * @var AbstractJsonValidator
+         */
+        $validator = $validatorFactory->build('Psalm', $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        /**
+         * AbstractConverter $converterImplementation.
+         */
+        $converterImplementation = $converterFactory->build(
+            'Psalm',
+            $validator,
+            $jsonDecodedInput
+        );
+
         // When
-        $validator = new PsalmJsonValidator($jsonDecodedInput);
-        $converter = new PsalmConvertToSubset($validator, $jsonDecodedInput);
-        $converter->convertToSubset();
+        $converterImplementation->convertToSubset();
 
         // Then
         $this->assertEquals(
             $jsonOutput,
-            $converter->getJsonEncodedOutput()
+            $converterImplementation->getJsonEncodedOutput()
         );
     }
 }

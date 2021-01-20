@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter;
 
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\NoValidatorsEnabledException;
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToGetJsonEncodedOutputException;
+use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\ConvertToSubsetInterface;
+use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\OutputInterface;
 use Safe\Exceptions\JsonException;
 use function Safe\json_encode;
 
@@ -27,10 +31,9 @@ class Converter implements ConvertToSubsetInterface, OutputInterface
     public function convertToSubset(): void
     {
         if (empty($this->converters)) {
-            throw new NoConvertersEnabledException();
+            throw new NoValidatorsEnabledException();
         }
 
-        /** @var AbstractConverter $converter */
         foreach ($this->converters as $converter) {
             $converter->convertToSubset();
 

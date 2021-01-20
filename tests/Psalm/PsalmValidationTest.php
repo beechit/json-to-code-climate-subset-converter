@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\Psalm;
 
-use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\InvalidJsonException;
 use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractConverter;
-use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\InvalidJsonException;
 
 final class PhpCodeSnifferConvertToSubset extends AbstractConverter
 {

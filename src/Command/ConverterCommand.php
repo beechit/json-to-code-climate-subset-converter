@@ -2,8 +2,17 @@
 
 declare(strict_types=1);
 
-namespace BeechIt\JsonToCodeClimateSubsetConverter;
+namespace BeechIt\JsonToCodeClimateSubsetConverter\Command;
 
+use BeechIt\JsonToCodeClimateSubsetConverter\AbstractJsonValidator;
+use BeechIt\JsonToCodeClimateSubsetConverter\Converter;
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\NoValidatorsEnabledException;
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToAddOption;
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToCreateFilenameException;
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToGetJsonEncodedOutputException;
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToWriteOutputLine;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ConverterFactory;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ValidatorFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer\PhpCodeSnifferConvertToSubset;
@@ -15,6 +24,7 @@ use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmJsonValidator;
 use function file_exists;
+use PHLAK\Config\Config;
 use Safe\Exceptions\FilesystemException;
 use Safe\Exceptions\JsonException;
 use Safe\Exceptions\StringsException;
@@ -35,11 +45,6 @@ class ConverterCommand extends Command
     const EXIT_NO_CONVERTER_INCLUDED = 3;
     const EXIT_UNABLE_TO_WRITE_FILE = 4;
     const EXIT_UNABLE_TO_GET_ENCODED_OUTPUT = 5;
-
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'convert';
 
     /**
      * @var array
@@ -67,11 +72,25 @@ class ConverterCommand extends Command
         ],
     ];
 
+    /**
+     * @var Config
+     */
+    private $configuration;
+
+    public function __construct(
+        string $name,
+        Config $configuration
+    ) {
+        $this->configuration = $configuration;
+
+        parent::__construct($name);
+    }
+
     protected function configure(): void
     {
-        foreach (static::$supportedConverters as $converterName => $converter) {
+        foreach ($this->configuration->get('converters') as $converter) {
             try {
-                $this->option($converterName);
+                $this->option($converter);
             } catch (UnableToAddOption $exception) {
                 exit();
             }
@@ -95,14 +114,14 @@ class ConverterCommand extends Command
          * @var string $converterName
          * @var string $supportedConverter
          */
-        foreach (static::$supportedConverters as $converterName => $supportedConverter) {
-            if (false !== $input->getOption(strtolower($converterName))) {
+        foreach ($this->configuration->get('converters') as $supportedConverter) {
+            if (false !== $input->getOption(strtolower($supportedConverter))) {
                 try {
                     /** @var string $filename */
                     $filename = $input->getOption(
                         sprintf(
                             '%s-json-file',
-                            strtolower($converterName)
+                            strtolower($supportedConverter)
                         )
                     );
                 } catch (StringsException $exception) {
@@ -115,7 +134,7 @@ class ConverterCommand extends Command
                     $output->writeln(
                         sprintf(
                             '<comment>Converting %s via %s.</comment>',
-                            $converterName,
+                            $supportedConverter,
                             $filename
                         )
                     );
@@ -142,15 +161,23 @@ class ConverterCommand extends Command
 
                     $jsonDecodedInput = json_decode($jsonInput);
 
+                    $validatorFactory = new ValidatorFactory();
+
                     /**
                      * @var AbstractJsonValidator
                      */
-                    $validator = new $supportedConverter['validator']($jsonDecodedInput);
+                    $validator = $validatorFactory->build($supportedConverter, $jsonDecodedInput);
+
+                    $converterFactory = new ConverterFactory();
 
                     /**
                      * AbstractConverter $converterImplementation.
                      */
-                    $converterImplementation = new $supportedConverter['converter']($validator, $jsonDecodedInput);
+                    $converterImplementation = $converterFactory->build(
+                        $supportedConverter,
+                        $validator,
+                        $jsonDecodedInput
+                    );
 
                     $converter->addConverter($converterImplementation);
                 } catch (JsonException $exception) {
@@ -184,7 +211,7 @@ class ConverterCommand extends Command
                 $outputFilename,
                 $converter->getJsonEncodedOutput()
             );
-        } catch (NoConvertersEnabledException $exception) {
+        } catch (NoValidatorsEnabledException $exception) {
             $output->writeln(
                 sprintf(
                     '<error>Please include at least 1 converter. See error code %d.</error>',

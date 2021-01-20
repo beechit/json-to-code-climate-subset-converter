@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\PHPLint;
 
-use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\InvalidJsonException;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPLint\PhpLintConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPLint\PhpLintJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;

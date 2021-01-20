@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BeechIt\JsonToCodeClimateSubsetConverter;
+namespace BeechIt\JsonToCodeClimateSubsetConverter\Interfaces;
 
 interface ConvertToSubsetInterface
 {

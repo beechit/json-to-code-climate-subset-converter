@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\PHPStan;
 
+use BeechIt\JsonToCodeClimateSubsetConverter\AbstractJsonValidator;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ConverterFactory;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ValidatorFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
@@ -65,15 +68,31 @@ class PHPStanConverterTest extends TestCase
 
         $jsonOutput = file_get_contents(__DIR__.'/fixtures/output.json');
 
+        $validatorFactory = new ValidatorFactory();
+
+        /**
+         * @var AbstractJsonValidator
+         */
+        $validator = $validatorFactory->build('PHPStan', $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        /**
+         * AbstractConverter $converterImplementation.
+         */
+        $converterImplementation = $converterFactory->build(
+            'PHPStan',
+            $validator,
+            $jsonDecodedInput
+        );
+
         // When
-        $validator = new PHPStanJsonValidator($jsonDecodedInput);
-        $converter = new PHPStanConvertToSubset($validator, $jsonDecodedInput);
-        $converter->convertToSubset();
+        $converterImplementation->convertToSubset();
 
         // Then
         $this->assertEquals(
             $jsonOutput,
-            $converter->getJsonEncodedOutput()
+            $converterImplementation->getJsonEncodedOutput()
         );
     }
 }

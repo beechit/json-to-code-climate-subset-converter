@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Psalm;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractConverter;
-use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\InvalidJsonException;
 
 final class PsalmConvertToSubset extends AbstractConverter
 {

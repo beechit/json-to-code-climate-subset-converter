@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\Phan;
 
+use BeechIt\JsonToCodeClimateSubsetConverter\AbstractJsonValidator;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ConverterFactory;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ValidatorFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
@@ -51,15 +54,31 @@ class PhanConverterTest extends TestCase
 
         $jsonOutput = file_get_contents(__DIR__.'/fixtures/output.json');
 
+        $validatorFactory = new ValidatorFactory();
+
+        /**
+         * @var AbstractJsonValidator
+         */
+        $validator = $validatorFactory->build('Phan', $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        /**
+         * AbstractConverter $converterImplementation.
+         */
+        $converterImplementation = $converterFactory->build(
+            'Phan',
+            $validator,
+            $jsonDecodedInput
+        );
+
         // When
-        $validator = new PhanJsonValidator($jsonDecodedInput);
-        $converter = new PhanConvertToSubset($validator, $jsonDecodedInput);
-        $converter->convertToSubset();
+        $converterImplementation->convertToSubset();
 
         // Then
         $this->assertEquals(
             $jsonOutput,
-            $converter->getJsonEncodedOutput()
+            $converterImplementation->getJsonEncodedOutput()
         );
     }
 }

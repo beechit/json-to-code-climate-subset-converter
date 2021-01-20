@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter;
 
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToCreateDescription;
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToCreateFingerprint;
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToGetJsonEncodedOutputException;
+use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\ConvertToSubsetInterface;
+use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\OutputInterface;
+use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\SafeMethodsInterface;
 use Safe\Exceptions\JsonException;
 use Safe\Exceptions\StringsException;
-use function json_encode;
 use function Safe\sprintf;
 
 abstract class AbstractConverter implements OutputInterface, ConvertToSubsetInterface
@@ -27,16 +32,23 @@ abstract class AbstractConverter implements OutputInterface, ConvertToSubsetInte
     protected $codeClimateNodes = [];
 
     /**
+     * @var SafeMethodsInterface
+     */
+    private $safeMethods;
+
+    /**
      * AbstractConverter constructor.
      *
-     * @param AbstractJsonValidator $abstractJsonValidator
      * @param mixed $json
      */
-    public function __construct(AbstractJsonValidator $abstractJsonValidator, $json)
-    {
+    public function __construct(
+        AbstractJsonValidator $abstractJsonValidator,
+        $json,
+        SafeMethodsInterface $safeMethods = null
+    ) {
         $this->abstractJsonValidator = $abstractJsonValidator;
-
         $this->json = $json;
+        $this->safeMethods = $safeMethods;
     }
 
     public function getOutput(): array
@@ -47,7 +59,7 @@ abstract class AbstractConverter implements OutputInterface, ConvertToSubsetInte
     public function getJsonEncodedOutput(): string
     {
         try {
-            return json_encode(
+            return $this->safeMethods->json_encode(
                 $this->getOutput(),
                 JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
             );
@@ -69,7 +81,7 @@ abstract class AbstractConverter implements OutputInterface, ConvertToSubsetInte
     ): string {
         try {
             return md5(
-                sprintf(
+                $this->safeMethods->sprintf(
                     '%s%s%s',
                     $description,
                     $filename,

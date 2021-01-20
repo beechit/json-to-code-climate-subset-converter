@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Psalm;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractJsonValidator;
-use BeechIt\JsonToCodeClimateSubsetConverter\InvalidJsonException;
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\InvalidJsonException;
 
 class PsalmJsonValidator extends AbstractJsonValidator
 {

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter;
 
+use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\JsonValidatorInterface;
+
 abstract class AbstractJsonValidator implements JsonValidatorInterface
 {
     /**

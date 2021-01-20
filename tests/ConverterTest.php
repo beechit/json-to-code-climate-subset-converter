@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests;
 
+use BeechIt\JsonToCodeClimateSubsetConverter\AbstractJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Converter;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ConverterFactory;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ValidatorFactory;
 
 /**
  * @internal
@@ -19,13 +22,30 @@ class ConverterTest extends TestCase
         string $jsonOutput,
         string $validator,
         string $converter,
-        array $output
+        array $output,
+        string $name
     ): void {
         // Given
         $jsonInput = file_get_contents(__DIR__.$jsonInput);
         $jsonDecodedInput = json_decode($jsonInput);
-        $validator = new $validator($jsonDecodedInput);
-        $converterImplementation = new $converter($validator, $jsonDecodedInput);
+
+        $validatorFactory = new ValidatorFactory();
+
+        /**
+         * @var AbstractJsonValidator
+         */
+        $validator = $validatorFactory->build($name, $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        /**
+         * AbstractConverter $converterImplementation.
+         */
+        $converterImplementation = $converterFactory->build(
+            $name,
+            $validator,
+            $jsonDecodedInput
+        );
 
         // When
         $converter = new Converter();

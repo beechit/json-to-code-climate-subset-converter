@@ -24,7 +24,7 @@ class TestCase extends BaseTestCase
     /**
      * @see \BeechIt\JsonToCodeClimateSubsetConverter\Tests\ConverterTest::testItCanConvertOneConvertersJsonToSubset
      * @see \BeechIt\JsonToCodeClimateSubsetConverter\Tests\ConverterTest::testItCanConvertOneConvertersJsonToJsonSubset
-     * @see \BeechIt\JsonToCodeClimateSubsetConverter\Tests\CommandLine\CommandLineTest::testItFailsConvertersWithoutJsonInput
+     * @see \BeechIt\JsonToCodeClimateSubsetConverter\Tests\Command\CommandTest::testItFailsConvertersWithoutJsonInput
      */
     public function multipleConvertersProvider(): array
     {
@@ -45,6 +45,7 @@ class TestCase extends BaseTestCase
                         ],
                     ],
                 ],
+                'name' => 'Phan',
             ],
             'PHP_CodeSniffer' => [
                 'jsonInput' => '/PHP_CodeSniffer/fixtures/input.json',
@@ -61,6 +62,8 @@ class TestCase extends BaseTestCase
                         ],
                     ],
                 ],
+                'name' => 'PHP_CodeSniffer
+                ',
             ],
             'PHPLint' => [
                 'jsonInput' => '/PHPLint/fixtures/input.json',
@@ -77,6 +80,7 @@ class TestCase extends BaseTestCase
                         ],
                     ],
                 ],
+                'name' => 'PHPLint',
             ],
             'PHPStan' => [
                 'jsonInput' => '/PHPStan/fixtures/input.json',
@@ -93,6 +97,7 @@ class TestCase extends BaseTestCase
                         ],
                     ],
                 ],
+                'name' => 'PHPStan',
             ],
             'Psalm' => [
                 'jsonInput' => '/Psalm/fixtures/input.json',
@@ -110,6 +115,7 @@ class TestCase extends BaseTestCase
                         ],
                     ],
                 ],
+                'name' => 'Psalm',
             ],
         ];
     }

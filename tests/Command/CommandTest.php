@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\CommandLine;
+namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\Command;
 
 use function basename;
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractConverter;
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractJsonValidator;
-use BeechIt\JsonToCodeClimateSubsetConverter\ConverterCommand;
+use BeechIt\JsonToCodeClimateSubsetConverter\Command\ConverterCommand;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
 use function file_get_contents;
 use function json_decode;
+use PHLAK\Config\Config;
 use function sprintf;
 use function strtolower;
 use Symfony\Component\Console\Application;
@@ -19,13 +20,20 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * @internal
  */
-class CommandLineTest extends TestCase
+class CommandTest extends TestCase
 {
     public function testItFailsWhenNoConverterIsAdded(): void
     {
         // Given
+        $configuration = new Config(__DIR__.'/../../config/converters.php');
+
         $application = new Application();
-        $application->add(new ConverterCommand());
+        $application->add(
+            new ConverterCommand(
+                'convert',
+                $configuration
+            )
+        );
 
         $command = $application->find('convert');
         $commandTester = new CommandTester($command);
@@ -59,8 +67,15 @@ class CommandLineTest extends TestCase
         /** @var AbstractConverter $converterImplementation */
         $converterImplementation = new $converter($validator, $jsonDecodedInput);
 
+        $configuration = new Config(__DIR__.'/../../config/converters.php');
+
         $application = new Application();
-        $application->add(new ConverterCommand());
+        $application->add(
+            new ConverterCommand(
+                'convert',
+                $configuration
+            )
+        );
 
         $command = $application->find('convert');
         $commandTester = new CommandTester($command);
@@ -115,8 +130,15 @@ class CommandLineTest extends TestCase
         /** @var AbstractConverter $converterImplementation */
         $converterImplementation = new $converter($validator, $jsonDecodedInput);
 
+        $configuration = new Config(__DIR__.'/../../config/converters.php');
+
         $application = new Application();
-        $application->add(new ConverterCommand());
+        $application->add(
+            new ConverterCommand(
+                'convert',
+                $configuration
+            )
+        );
 
         $command = $application->find('convert');
         $commandTester = new CommandTester($command);
