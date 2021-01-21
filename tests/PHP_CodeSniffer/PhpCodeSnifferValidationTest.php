@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\PHP_CodeSniffer;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\InvalidJsonException;
-use BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer\PhpCodeSnifferConvertToSubset;
-use BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer\PhpCodeSnifferJsonValidator;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ConverterFactory;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ValidatorFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
 
 /**
@@ -23,10 +23,20 @@ class PhpCodeSnifferValidationTest extends TestCase
         $jsonInput = file_get_contents(__DIR__.'/fixtures/invalid-files-input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build('PHP_CodeSniffer', $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            'PHP_CodeSniffer',
+            $validator,
+            $jsonDecodedInput
+        );
+
         // When
-        $validator = new PhpCodeSnifferJsonValidator($jsonDecodedInput);
-        $converter = new PhpCodeSnifferConvertToSubset($validator, $jsonDecodedInput);
-        $converter->convertToSubset();
+        $converterImplementation->convertToSubset();
     }
 
     public function testItThrowsAnExceptionWhenFilesMessagesPropertyIsMissing()
@@ -38,10 +48,20 @@ class PhpCodeSnifferValidationTest extends TestCase
         $jsonInput = file_get_contents(__DIR__.'/fixtures/invalid-files-messages-input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build('PHP_CodeSniffer', $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            'PHP_CodeSniffer',
+            $validator,
+            $jsonDecodedInput
+        );
+
         // When
-        $validator = new PhpCodeSnifferJsonValidator($jsonDecodedInput);
-        $converter = new PhpCodeSnifferConvertToSubset($validator, $jsonDecodedInput);
-        $converter->convertToSubset();
+        $converterImplementation->convertToSubset();
     }
 
     public function testItThrowsAnExceptionWhenFilesMessagesMessagePropertyIsMissing()
@@ -53,10 +73,20 @@ class PhpCodeSnifferValidationTest extends TestCase
         $jsonInput = file_get_contents(__DIR__.'/fixtures/invalid-files-messages-message-input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build('PHP_CodeSniffer', $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            'PHP_CodeSniffer',
+            $validator,
+            $jsonDecodedInput
+        );
+
         // When
-        $validator = new PhpCodeSnifferJsonValidator($jsonDecodedInput);
-        $converter = new PhpCodeSnifferConvertToSubset($validator, $jsonDecodedInput);
-        $converter->convertToSubset();
+        $converterImplementation->convertToSubset();
     }
 
     public function testItThrowsAnExceptionWhenFilesMessagesLinePropertyIsMissing()
@@ -68,9 +98,19 @@ class PhpCodeSnifferValidationTest extends TestCase
         $jsonInput = file_get_contents(__DIR__.'/fixtures/invalid-files-messages-line-input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build('PHP_CodeSniffer', $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            'PHP_CodeSniffer',
+            $validator,
+            $jsonDecodedInput
+        );
+
         // When
-        $validator = new PhpCodeSnifferJsonValidator($jsonDecodedInput);
-        $converter = new PhpCodeSnifferConvertToSubset($validator, $jsonDecodedInput);
-        $converter->convertToSubset();
+        $converterImplementation->convertToSubset();
     }
 }

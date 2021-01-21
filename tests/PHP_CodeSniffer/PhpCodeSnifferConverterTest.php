@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\PHP_CodeSniffer;
 
-use BeechIt\JsonToCodeClimateSubsetConverter\AbstractJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ConverterFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ValidatorFactory;
-use BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer\PhpCodeSnifferConvertToSubset;
-use BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer\PhpCodeSnifferJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
 
 /**
@@ -22,10 +19,20 @@ class PhpCodeSnifferConverterTest extends TestCase
         $jsonInput = file_get_contents(__DIR__.'/fixtures/input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build('PHP_CodeSniffer', $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            'PHP_CodeSniffer',
+            $validator,
+            $jsonDecodedInput
+        );
+
         // When
-        $validator = new PhpCodeSnifferJsonValidator($jsonDecodedInput);
-        $converter = new PhpCodeSnifferConvertToSubset($validator, $jsonDecodedInput);
-        $converter->convertToSubset();
+        $converterImplementation->convertToSubset();
 
         // Then
         $this->assertEquals(
@@ -41,7 +48,7 @@ class PhpCodeSnifferConverterTest extends TestCase
                     ],
                 ],
             ],
-            $converter->getOutput()
+            $converterImplementation->getOutput()
         );
     }
 
@@ -55,16 +62,10 @@ class PhpCodeSnifferConverterTest extends TestCase
 
         $validatorFactory = new ValidatorFactory();
 
-        /**
-         * @var AbstractJsonValidator
-         */
         $validator = $validatorFactory->build('PHP_CodeSniffer', $jsonDecodedInput);
 
         $converterFactory = new ConverterFactory();
 
-        /**
-         * AbstractConverter $converterImplementation.
-         */
         $converterImplementation = $converterFactory->build(
             'PHP_CodeSniffer',
             $validator,

@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\PHPLint;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\InvalidJsonException;
-use BeechIt\JsonToCodeClimateSubsetConverter\PHPLint\PhpLintConvertToSubset;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ConverterFactory;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ValidatorFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPLint\PhpLintJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
+use function file_get_contents;
+use function json_decode;
 
 /**
  * @internal
@@ -23,10 +26,20 @@ class PhpLintValidationTest extends TestCase
         $jsonInput = file_get_contents(__DIR__.'/fixtures/invalid-errors-input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build('PHPLint', $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            'PHPLint',
+            $validator,
+            $jsonDecodedInput
+        );
+
         // When
-        $validator = new PhpLintJsonValidator($jsonDecodedInput);
-        $converter = new PhpLintConvertToSubset($validator, $jsonDecodedInput);
-        $converter->convertToSubset();
+        $converterImplementation->convertToSubset();
     }
 
     public function testItThrowsAnExceptionWhenErrorsFilePropertyIsMissing()
@@ -38,10 +51,20 @@ class PhpLintValidationTest extends TestCase
         $jsonInput = file_get_contents(__DIR__.'/fixtures/invalid-errors-file-input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build('PHPLint', $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            'PHPLint',
+            $validator,
+            $jsonDecodedInput
+        );
+
         // When
-        $validator = new PhpLintJsonValidator($jsonDecodedInput);
-        $converter = new PhpLintConvertToSubset($validator, $jsonDecodedInput);
-        $converter->convertToSubset();
+        $converterImplementation->convertToSubset();
     }
 
     public function testItThrowsAnExceptionWhenErrorsErrorPropertyIsMissing()
@@ -53,10 +76,20 @@ class PhpLintValidationTest extends TestCase
         $jsonInput = file_get_contents(__DIR__.'/fixtures/invalid-errors-error-input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build('PHPLint', $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            'PHPLint',
+            $validator,
+            $jsonDecodedInput
+        );
+
         // When
-        $validator = new PhpLintJsonValidator($jsonDecodedInput);
-        $converter = new PhpLintConvertToSubset($validator, $jsonDecodedInput);
-        $converter->convertToSubset();
+        $converterImplementation->convertToSubset();
     }
 
     public function testItThrowsAnExceptionWhenErrorsLinePropertyIsMissing()
@@ -68,9 +101,32 @@ class PhpLintValidationTest extends TestCase
         $jsonInput = file_get_contents(__DIR__.'/fixtures/invalid-errors-line-input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build('PHPLint', $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            'PHPLint',
+            $validator,
+            $jsonDecodedInput
+        );
+
         // When
-        $validator = new PhpLintJsonValidator($jsonDecodedInput);
-        $converter = new PhpLintConvertToSubset($validator, $jsonDecodedInput);
-        $converter->convertToSubset();
+        $converterImplementation->convertToSubset();
+    }
+
+    public function testItThrowsAnExceptionWhenObjectIsNotBuiltViaFactory(): void
+    {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Validator was not built via it\'s factory');
+
+        // Given
+        $jsonInput = file_get_contents(__DIR__.'/fixtures/input.json');
+        $jsonDecodedInput = json_decode($jsonInput);
+
+        // When
+        new PhpLintJsonValidator($jsonDecodedInput);
     }
 }

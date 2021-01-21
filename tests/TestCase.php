@@ -62,8 +62,7 @@ class TestCase extends BaseTestCase
                         ],
                     ],
                 ],
-                'name' => 'PHP_CodeSniffer
-                ',
+                'name' => 'PHP_CodeSniffer',
             ],
             'PHPLint' => [
                 'jsonInput' => '/PHPLint/fixtures/input.json',

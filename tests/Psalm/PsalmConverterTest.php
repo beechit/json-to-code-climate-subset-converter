@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\Psalm;
 
-use BeechIt\JsonToCodeClimateSubsetConverter\AbstractJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ConverterFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ValidatorFactory;
-use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmConvertToSubset;
-use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
 
 /**
@@ -22,10 +19,20 @@ class PsalmConverterTest extends TestCase
         $jsonInput = file_get_contents(__DIR__.'/fixtures/input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build('Psalm', $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            'Psalm',
+            $validator,
+            $jsonDecodedInput
+        );
+
         // When
-        $validator = new PsalmJsonValidator($jsonDecodedInput);
-        $converter = new PsalmConvertToSubset($validator, $jsonDecodedInput);
-        $converter->convertToSubset();
+        $converterImplementation->convertToSubset();
 
         // Then
         $this->assertEquals(
@@ -42,7 +49,7 @@ class PsalmConverterTest extends TestCase
                     ],
                 ],
             ],
-            $converter->getOutput()
+            $converterImplementation->getOutput()
         );
     }
 
@@ -56,16 +63,10 @@ class PsalmConverterTest extends TestCase
 
         $validatorFactory = new ValidatorFactory();
 
-        /**
-         * @var AbstractJsonValidator
-         */
         $validator = $validatorFactory->build('Psalm', $jsonDecodedInput);
 
         $converterFactory = new ConverterFactory();
 
-        /**
-         * AbstractConverter $converterImplementation.
-         */
         $converterImplementation = $converterFactory->build(
             'Psalm',
             $validator,

@@ -21,7 +21,7 @@ class SafeMethods implements SafeMethodsInterface
     {
         return \Safe\sprintf(
             $format,
-            $params
+            ...$params
         );
     }
 }

@@ -7,12 +7,13 @@ namespace BeechIt\JsonToCodeClimateSubsetConverter;
 use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToCreateDescription;
 use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToCreateFingerprint;
 use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToGetJsonEncodedOutputException;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ConverterFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\ConvertToSubsetInterface;
 use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\OutputInterface;
 use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\SafeMethodsInterface;
+use function debug_backtrace;
 use Safe\Exceptions\JsonException;
 use Safe\Exceptions\StringsException;
-use function Safe\sprintf;
 
 abstract class AbstractConverter implements OutputInterface, ConvertToSubsetInterface
 {
@@ -46,6 +47,13 @@ abstract class AbstractConverter implements OutputInterface, ConvertToSubsetInte
         $json,
         SafeMethodsInterface $safeMethods = null
     ) {
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
+        $constructingClass = $backtrace[1]['class'];
+
+        if (ConverterFactory::class !== $constructingClass) {
+            throw new \LogicException('Converter was not built via it\'s factory');
+        }
+
         $this->abstractJsonValidator = $abstractJsonValidator;
         $this->json = $json;
         $this->safeMethods = $safeMethods;
@@ -98,7 +106,7 @@ abstract class AbstractConverter implements OutputInterface, ConvertToSubsetInte
     protected function createDescription(string $description): string
     {
         try {
-            return sprintf(
+            return $this->safeMethods->sprintf(
                 '(%s) %s',
                 $this->getToolName(),
                 $description

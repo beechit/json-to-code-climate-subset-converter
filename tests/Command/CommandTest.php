@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\Command;
 
 use function basename;
-use BeechIt\JsonToCodeClimateSubsetConverter\AbstractConverter;
-use BeechIt\JsonToCodeClimateSubsetConverter\AbstractJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Command\ConverterCommand;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ConverterFactory;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ValidatorFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
 use function file_get_contents;
 use function json_decode;
@@ -54,18 +54,25 @@ class CommandTest extends TestCase
         string $jsonOutput,
         string $validator,
         string $converter,
-        array $output
+        array $output,
+        string $name
     ): void {
         // Given
         $jsonFileName = $jsonInput;
         $jsonInput = file_get_contents(__DIR__.'/../'.$jsonInput);
         $jsonDecodedInput = json_decode($jsonInput);
 
-        /** @var AbstractJsonValidator $validator */
-        $validator = new $validator($jsonDecodedInput);
+        $validatorFactory = new ValidatorFactory();
 
-        /** @var AbstractConverter $converterImplementation */
-        $converterImplementation = new $converter($validator, $jsonDecodedInput);
+        $validator = $validatorFactory->build($name, $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            $name,
+            $validator,
+            $jsonDecodedInput
+        );
 
         $configuration = new Config(__DIR__.'/../../config/converters.php');
 
@@ -117,18 +124,25 @@ class CommandTest extends TestCase
         string $jsonOutput,
         string $validator,
         string $converter,
-        array $output
+        array $output,
+        string $name
     ): void {
         // Given
         $jsonFileName = $jsonInput;
         $jsonInput = file_get_contents(__DIR__.'/../'.$jsonInput);
         $jsonDecodedInput = json_decode($jsonInput);
 
-        /** @var AbstractJsonValidator $validator */
-        $validator = new $validator($jsonDecodedInput);
+        $validatorFactory = new ValidatorFactory();
 
-        /** @var AbstractConverter $converterImplementation */
-        $converterImplementation = new $converter($validator, $jsonDecodedInput);
+        $validator = $validatorFactory->build($name, $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            $name,
+            $validator,
+            $jsonDecodedInput
+        );
 
         $configuration = new Config(__DIR__.'/../../config/converters.php');
 

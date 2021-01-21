@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\PHPStan;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\InvalidJsonException;
-use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanConvertToSubset;
-use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanJsonValidator;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ConverterFactory;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ValidatorFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
 
 /**
@@ -23,10 +23,20 @@ class PHPStanValidationTest extends TestCase
         $jsonInput = file_get_contents(__DIR__.'/fixtures/invalid-description-input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build('PHPStan', $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            'PHPStan',
+            $validator,
+            $jsonDecodedInput
+        );
+
         // When
-        $validator = new PHPStanJsonValidator($jsonDecodedInput);
-        $converter = new PHPStanConvertToSubset($validator, $jsonDecodedInput);
-        $converter->convertToSubset();
+        $converterImplementation->convertToSubset();
     }
 
     public function testItThrowsAnExceptionWhenLocationPropertyIsMissing()
@@ -37,11 +47,20 @@ class PHPStanValidationTest extends TestCase
         // Given
         $jsonInput = file_get_contents(__DIR__.'/fixtures/invalid-location-input.json');
         $jsonDecodedInput = json_decode($jsonInput);
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build('PHPStan', $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            'PHPStan',
+            $validator,
+            $jsonDecodedInput
+        );
 
         // When
-        $validator = new PHPStanJsonValidator($jsonDecodedInput);
-        $converter = new PHPStanConvertToSubset($validator, $jsonDecodedInput);
-        $converter->convertToSubset();
+        $converterImplementation->convertToSubset();
     }
 
     public function testItThrowsAnExceptionWhenLocationPathPropertyIsMissing()
@@ -53,10 +72,20 @@ class PHPStanValidationTest extends TestCase
         $jsonInput = file_get_contents(__DIR__.'/fixtures/invalid-location-path-input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build('PHPStan', $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            'PHPStan',
+            $validator,
+            $jsonDecodedInput
+        );
+
         // When
-        $validator = new PHPStanJsonValidator($jsonDecodedInput);
-        $converter = new PHPStanConvertToSubset($validator, $jsonDecodedInput);
-        $converter->convertToSubset();
+        $converterImplementation->convertToSubset();
     }
 
     public function testItThrowsAnExceptionWhenLocationLinesPropertyIsMissing()
@@ -68,10 +97,20 @@ class PHPStanValidationTest extends TestCase
         $jsonInput = file_get_contents(__DIR__.'/fixtures/invalid-location-lines-input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build('PHPStan', $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            'PHPStan',
+            $validator,
+            $jsonDecodedInput
+        );
+
         // When
-        $validator = new PHPStanJsonValidator($jsonDecodedInput);
-        $converter = new PHPStanConvertToSubset($validator, $jsonDecodedInput);
-        $converter->convertToSubset();
+        $converterImplementation->convertToSubset();
     }
 
     public function testItThrowsAnExceptionWhenLocationLinesBeginPropertyIsMissing()
@@ -83,9 +122,19 @@ class PHPStanValidationTest extends TestCase
         $jsonInput = file_get_contents(__DIR__.'/fixtures/invalid-location-lines-begin-input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build('PHPStan', $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            'PHPStan',
+            $validator,
+            $jsonDecodedInput
+        );
+
         // When
-        $validator = new PHPStanJsonValidator($jsonDecodedInput);
-        $converter = new PHPStanConvertToSubset($validator, $jsonDecodedInput);
-        $converter->convertToSubset();
+        $converterImplementation->convertToSubset();
     }
 }

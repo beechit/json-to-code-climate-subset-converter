@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests;
 
-use BeechIt\JsonToCodeClimateSubsetConverter\AbstractJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Converter;
 use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ConverterFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ValidatorFactory;
@@ -31,16 +30,10 @@ class ConverterTest extends TestCase
 
         $validatorFactory = new ValidatorFactory();
 
-        /**
-         * @var AbstractJsonValidator
-         */
         $validator = $validatorFactory->build($name, $jsonDecodedInput);
 
         $converterFactory = new ConverterFactory();
 
-        /**
-         * AbstractConverter $converterImplementation.
-         */
         $converterImplementation = $converterFactory->build(
             $name,
             $validator,
@@ -69,13 +62,24 @@ class ConverterTest extends TestCase
         string $jsonOutput,
         string $validator,
         string $converter,
-        array $output
+        array $output,
+        string $name
     ): void {
         // Given
         $jsonInput = file_get_contents(__DIR__.$jsonInput);
         $jsonDecodedInput = json_decode($jsonInput);
-        $validator = new $validator($jsonDecodedInput);
-        $converterImplementation = new $converter($validator, $jsonDecodedInput);
+
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build($name, $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            $name,
+            $validator,
+            $jsonDecodedInput
+        );
 
         $jsonOutput = file_get_contents(__DIR__.$jsonOutput);
 
@@ -101,8 +105,18 @@ class ConverterTest extends TestCase
         foreach ($converters as $converterDetails) {
             $jsonInput = file_get_contents(__DIR__.$converterDetails['jsonInput']);
             $jsonDecodedInput = json_decode($jsonInput);
-            $validator = new $converterDetails['validator']($jsonDecodedInput);
-            $converterImplementation = new $converterDetails['converter']($validator, $jsonDecodedInput);
+
+            $validatorFactory = new ValidatorFactory();
+
+            $validator = $validatorFactory->build($converterDetails['name'], $jsonDecodedInput);
+
+            $converterFactory = new ConverterFactory();
+
+            $converterImplementation = $converterFactory->build(
+                $converterDetails['name'],
+                $validator,
+                $jsonDecodedInput
+            );
 
             $converter->addConverter($converterImplementation);
 
@@ -130,8 +144,18 @@ class ConverterTest extends TestCase
         foreach ($converters as $converterDetails) {
             $jsonInput = file_get_contents(__DIR__.$converterDetails['jsonInput']);
             $jsonDecodedInput = json_decode($jsonInput);
-            $validator = new $converterDetails['validator']($jsonDecodedInput);
-            $converterImplementation = new $converterDetails['converter']($validator, $jsonDecodedInput);
+
+            $validatorFactory = new ValidatorFactory();
+
+            $validator = $validatorFactory->build($converterDetails['name'], $jsonDecodedInput);
+
+            $converterFactory = new ConverterFactory();
+
+            $converterImplementation = $converterFactory->build(
+                $converterDetails['name'],
+                $validator,
+                $jsonDecodedInput
+            );
 
             $converter->addConverter($converterImplementation);
         }

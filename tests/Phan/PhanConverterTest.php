@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\Phan;
 
-use BeechIt\JsonToCodeClimateSubsetConverter\AbstractJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ConverterFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ValidatorFactory;
-use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanConvertToSubset;
-use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
 
 /**
@@ -22,10 +19,20 @@ class PhanConverterTest extends TestCase
         $jsonInput = file_get_contents(__DIR__.'/fixtures/input.json');
         $jsonDecodedInput = json_decode($jsonInput);
 
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build('Phan', $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            'Phan',
+            $validator,
+            $jsonDecodedInput
+        );
+
         // When
-        $validator = new PhanJsonValidator($jsonDecodedInput);
-        $converter = new PhanConvertToSubset($validator, $jsonDecodedInput);
-        $converter->convertToSubset();
+        $converterImplementation->convertToSubset();
 
         // Then
         $this->assertEquals(
@@ -42,7 +49,7 @@ class PhanConverterTest extends TestCase
                     ],
                 ],
             ],
-            $converter->getOutput()
+            $converterImplementation->getOutput()
         );
     }
 
@@ -56,16 +63,10 @@ class PhanConverterTest extends TestCase
 
         $validatorFactory = new ValidatorFactory();
 
-        /**
-         * @var AbstractJsonValidator
-         */
         $validator = $validatorFactory->build('Phan', $jsonDecodedInput);
 
         $converterFactory = new ConverterFactory();
 
-        /**
-         * AbstractConverter $converterImplementation.
-         */
         $converterImplementation = $converterFactory->build(
             'Phan',
             $validator,
