@@ -8,8 +8,9 @@ use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\NoValidatorsEnabledExcep
 use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToGetJsonEncodedOutputException;
 use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\ConvertToSubsetInterface;
 use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\OutputInterface;
+use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\SafeMethodsInterface;
+use BeechIt\JsonToCodeClimateSubsetConverter\Utilities\SafeMethods;
 use Safe\Exceptions\JsonException;
-use function Safe\json_encode;
 
 class Converter implements ConvertToSubsetInterface, OutputInterface
 {
@@ -22,6 +23,16 @@ class Converter implements ConvertToSubsetInterface, OutputInterface
      * @var AbstractConverter[]
      */
     private $converters;
+
+    /**
+     * @var SafeMethodsInterface
+     */
+    private $safeMethods;
+
+    public function __construct(SafeMethodsInterface $safeMethods = null)
+    {
+        $this->safeMethods = $safeMethods ?: new SafeMethods();
+    }
 
     public function addConverter(AbstractConverter $converter): void
     {
@@ -52,7 +63,7 @@ class Converter implements ConvertToSubsetInterface, OutputInterface
     public function getJsonEncodedOutput(): string
     {
         try {
-            return json_encode(
+            return $this->safeMethods->json_encode(
                 $this->getOutput(),
                 JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
             );

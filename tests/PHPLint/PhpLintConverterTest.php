@@ -91,7 +91,7 @@ class PhpLintConverterTest extends TestCase
         );
     }
 
-    public function testItCanThrowAnExceptionWhenConvertingPhpLintJsonToJsonSubsetFails(): void
+    public function testItThrowsAnExceptionWhenConvertingPhpLintJsonToJsonSubsetFails(): void
     {
         $this->expectException(UnableToGetJsonEncodedOutputException::class);
 
@@ -121,7 +121,7 @@ class PhpLintConverterTest extends TestCase
         $converterImplementation->getJsonEncodedOutput();
     }
 
-    public function testItCanThrowAnExceptionWhenItCanNotCreateAFingerprint(): void
+    public function testItThrowsAnExceptionWhenItCanNotCreateAFingerprint(): void
     {
         $this->expectException(UnableToCreateFingerprint::class);
 
@@ -156,7 +156,7 @@ class PhpLintConverterTest extends TestCase
         $converterImplementation->convertToSubset();
     }
 
-    public function testItCanThrowAnExceptionWhenItCanNotCreateADescription(): void
+    public function testItThrowsAnExceptionWhenItCanNotCreateADescription(): void
     {
         $this->expectException(UnableToCreateDescription::class);
 
@@ -191,7 +191,7 @@ class PhpLintConverterTest extends TestCase
         $converterImplementation->convertToSubset();
     }
 
-    public function testItCanThrowAnExceptionWhenObjectIsNotBuiltViaFactory(): void
+    public function testItThrowsAnExceptionWhenObjectIsNotBuiltViaFactory(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Converter was not built via it\'s factory');

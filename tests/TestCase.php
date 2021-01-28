@@ -21,11 +21,6 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
  */
 class TestCase extends BaseTestCase
 {
-    /**
-     * @see \BeechIt\JsonToCodeClimateSubsetConverter\Tests\ConverterTest::testItCanConvertOneConvertersJsonToSubset
-     * @see \BeechIt\JsonToCodeClimateSubsetConverter\Tests\ConverterTest::testItCanConvertOneConvertersJsonToJsonSubset
-     * @see \BeechIt\JsonToCodeClimateSubsetConverter\Tests\Command\CommandTest::testItFailsConvertersWithoutJsonInput
-     */
     public function multipleConvertersProvider(): array
     {
         return [

@@ -6,9 +6,9 @@ namespace BeechIt\JsonToCodeClimateSubsetConverter\Factories;
 
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractConverter;
 use BeechIt\JsonToCodeClimateSubsetConverter\AbstractJsonValidator;
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\NoConvertersEnabledException;
 use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\ConverterFactoryInterface;
 use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\SafeMethodsInterface;
-use BeechIt\JsonToCodeClimateSubsetConverter\NoConvertersEnabledException;
 use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer\PhpCodeSnifferConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPLint\PhpLintConvertToSubset;
