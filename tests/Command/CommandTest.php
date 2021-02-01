@@ -5,13 +5,18 @@ declare(strict_types=1);
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\Command;
 
 use function basename;
-use BeechIt\JsonToCodeClimateSubsetConverter\Command\ConverterCommand;
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToAddOption;
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToCreateFilenameException;
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToWriteOutputLine;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\CommandFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ConverterFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ValidatorFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
+use BeechIt\JsonToCodeClimateSubsetConverter\Utilities\SafeMethods;
 use function file_get_contents;
 use function json_decode;
 use PHLAK\Config\Config;
+use Safe\Exceptions\StringsException;
 use function sprintf;
 use function strtolower;
 use Symfony\Component\Console\Application;
@@ -22,18 +27,155 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class CommandTest extends TestCase
 {
+    public function testItFailsWhenItCanNotConfigureConvertersNameOption(): void
+    {
+        $this->expectException(UnableToAddOption::class);
+
+        // Given
+        $safeMethods = $this->createMock(SafeMethods::class);
+
+        $safeMethods->method('sprintf')
+            ->willThrowException(new StringsException());
+
+        $application = new Application();
+
+        $commandFactory = new CommandFactory();
+        $command = $commandFactory->build('convert', null, $safeMethods);
+
+        $application->add($command);
+
+        $command = $application->find('convert');
+        $commandTester = new CommandTester($command);
+
+        // When
+        $commandTester->execute([]);
+    }
+
+    public function testItFailsWhenItCanNotConfigureConvertersFileOption(): void
+    {
+        $this->expectException(UnableToAddOption::class);
+
+        // Given
+        $safeMethods = $this->createMock(SafeMethods::class);
+
+        $safeMethods->method('sprintf')
+            ->will(
+                $this->onConsecutiveCalls(
+                    '',
+                    $this->throwException(new StringsException())
+                )
+            );
+
+        $application = new Application();
+
+        $commandFactory = new CommandFactory();
+        $command = $commandFactory->build('convert', null, $safeMethods);
+
+        $application->add($command);
+
+        $command = $application->find('convert');
+        $commandTester = new CommandTester($command);
+
+        // When
+        $commandTester->execute([]);
+    }
+
+    public function testItFailsWhenItCanNotGetConvertersFileOption(): void
+    {
+        $this->expectException(UnableToCreateFilenameException::class);
+
+        // Given
+        $configuration = $this->createMock(Config::class);
+
+        $configuration->method('get')
+            ->with('converters')
+            ->willReturn(
+                [
+                    'Converter-name',
+                ]
+            );
+
+        $safeMethods = $this->createMock(SafeMethods::class);
+
+        $safeMethods->method('sprintf')
+            ->will(
+                $this->onConsecutiveCalls(
+                    '',
+                    'converter-name-json-file',
+                    'converter-name-json-file.json',
+                    $this->throwException(new StringsException())
+                )
+            );
+
+        $application = new Application();
+
+        $commandFactory = new CommandFactory();
+        $command = $commandFactory->build('convert', $configuration, $safeMethods);
+
+        $application->add($command);
+
+        $command = $application->find('convert');
+        $commandTester = new CommandTester($command);
+
+        // When
+        $commandTester->execute([
+            '--converter-name' => true,
+        ]);
+    }
+
+    public function testItFailsWhenItCanNotWriteConvertingDetailsToOutputLine(): void
+    {
+        $this->expectException(UnableToWriteOutputLine::class);
+
+        // Given
+        $configuration = $this->createMock(Config::class);
+
+        $configuration->method('get')
+            ->with('converters')
+            ->willReturn(
+                [
+                    'Converter-name',
+                ]
+            );
+
+        $safeMethods = $this->createMock(SafeMethods::class);
+
+        $safeMethods->method('sprintf')
+            ->will(
+                $this->onConsecutiveCalls(
+                    '',
+                    'converter-name-json-file',
+                    'converter-name-json-file.json',
+                    'converter-name',
+                    $this->throwException(new StringsException())
+                )
+            );
+
+        $application = new Application();
+
+        $commandFactory = new CommandFactory();
+        $command = $commandFactory->build('convert', $configuration, $safeMethods);
+
+        $application->add($command);
+
+        $command = $application->find('convert');
+        $commandTester = new CommandTester($command);
+
+        // When
+        $commandTester->execute([
+            '--converter-name' => true,
+        ]);
+    }
+
     public function testItFailsWhenNoConverterIsAdded(): void
     {
         // Given
-        $configuration = new Config(__DIR__.'/../../config/converters.php');
-
         $application = new Application();
-        $application->add(
-            new ConverterCommand(
-                'convert',
-                $configuration
-            )
-        );
+
+        $commandFactory = new CommandFactory();
+        $command = $commandFactory->build('convert');
+
+        $application->add($command);
 
         $command = $application->find('convert');
         $commandTester = new CommandTester($command);
@@ -74,15 +216,12 @@ class CommandTest extends TestCase
             $jsonDecodedInput
         );
 
-        $configuration = new Config(__DIR__.'/../../config/converters.php');
-
         $application = new Application();
-        $application->add(
-            new ConverterCommand(
-                'convert',
-                $configuration
-            )
-        );
+
+        $commandFactory = new CommandFactory();
+        $command = $commandFactory->build('convert');
+
+        $application->add($command);
 
         $command = $application->find('convert');
         $commandTester = new CommandTester($command);
@@ -144,15 +283,12 @@ class CommandTest extends TestCase
             $jsonDecodedInput
         );
 
-        $configuration = new Config(__DIR__.'/../../config/converters.php');
-
         $application = new Application();
-        $application->add(
-            new ConverterCommand(
-                'convert',
-                $configuration
-            )
-        );
+
+        $commandFactory = new CommandFactory();
+        $command = $commandFactory->build('convert');
+
+        $application->add($command);
 
         $command = $application->find('convert');
         $commandTester = new CommandTester($command);

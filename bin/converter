@@ -24,17 +24,15 @@ if (!$loaded) {
 }
 
 use BeechIt\JsonToCodeClimateSubsetConverter\Command\ConverterCommand;
+use BeechIt\JsonToCodeClimateSubsetConverter\Factories\CommandFactory;
 use PHLAK\Config\Config;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
-$configuration = new Config('config/converters.php');
 
-$application->add(
-    new ConverterCommand(
-        'convert',
-        $configuration
-    )
-);
+$commandFactory = new CommandFactory();
+$command = $commandFactory->build('convert');
+
+$application->add($command);
 
 $application->run();

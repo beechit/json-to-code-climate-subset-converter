@@ -13,25 +13,13 @@ use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToGetJsonEncodedOu
 use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToWriteOutputLine;
 use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ConverterFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ValidatorFactory;
-use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanConvertToSubset;
-use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanJsonValidator;
-use BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer\PhpCodeSnifferConvertToSubset;
-use BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer\PhpCodeSnifferJsonValidator;
-use BeechIt\JsonToCodeClimateSubsetConverter\PHPLint\PhpLintConvertToSubset;
-use BeechIt\JsonToCodeClimateSubsetConverter\PHPLint\PhpLintJsonValidator;
-use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanConvertToSubset;
-use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanJsonValidator;
-use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmConvertToSubset;
-use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmJsonValidator;
+use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\SafeMethodsInterface;
 use function file_exists;
 use PHLAK\Config\Config;
 use Safe\Exceptions\FilesystemException;
 use Safe\Exceptions\JsonException;
 use Safe\Exceptions\StringsException;
-use function Safe\file_get_contents;
-use function Safe\file_put_contents;
-use function Safe\json_decode;
-use function Safe\sprintf;
+use function strtolower;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -47,41 +35,22 @@ class ConverterCommand extends Command
     const EXIT_UNABLE_TO_GET_ENCODED_OUTPUT = 5;
 
     /**
-     * @var array
-     */
-    private static $supportedConverters = [
-        'Phan' => [
-            'validator' => PhanJsonValidator::class,
-            'converter' => PhanConvertToSubset::class,
-        ],
-        'PHP_CodeSniffer' => [
-            'validator' => PhpCodeSnifferJsonValidator::class,
-            'converter' => PhpCodeSnifferConvertToSubset::class,
-        ],
-        'PHPLint' => [
-            'validator' => PhpLintJsonValidator::class,
-            'converter' => PhpLintConvertToSubset::class,
-        ],
-        'PHPStan' => [
-            'validator' => PHPStanJsonValidator::class,
-            'converter' => PHPStanConvertToSubset::class,
-        ],
-        'Psalm' => [
-            'validator' => PsalmJsonValidator::class,
-            'converter' => PsalmConvertToSubset::class,
-        ],
-    ];
-
-    /**
      * @var Config
      */
     private $configuration;
 
+    /**
+     * @var SafeMethodsInterface
+     */
+    private $safeMethods;
+
     public function __construct(
         string $name,
-        Config $configuration
+        Config $configuration,
+        SafeMethodsInterface $safeMethods
     ) {
         $this->configuration = $configuration;
+        $this->safeMethods = $safeMethods;
 
         parent::__construct($name);
     }
@@ -92,7 +61,7 @@ class ConverterCommand extends Command
             try {
                 $this->option($converter);
             } catch (UnableToAddOption $exception) {
-                exit();
+                throw $exception;
             }
         }
 
@@ -119,7 +88,7 @@ class ConverterCommand extends Command
                 try {
                     /** @var string $filename */
                     $filename = $input->getOption(
-                        sprintf(
+                        $this->safeMethods->sprintf(
                             '%s-json-file',
                             strtolower($supportedConverter)
                         )
@@ -132,7 +101,7 @@ class ConverterCommand extends Command
 
                 try {
                     $output->writeln(
-                        sprintf(
+                        $this->safeMethods->sprintf(
                             '<comment>Converting %s via %s.</comment>',
                             $supportedConverter,
                             $filename
@@ -146,7 +115,7 @@ class ConverterCommand extends Command
 
                 if (!file_exists($filename)) {
                     $output->writeln(
-                        sprintf(
+                        $this->safeMethods->sprintf(
                             '<error>Unable to find %s. See error code %d.</error>',
                             $filename,
                             self::EXIT_NO_FILE_FOUND
@@ -157,9 +126,9 @@ class ConverterCommand extends Command
                 }
 
                 try {
-                    $jsonInput = file_get_contents($filename);
+                    $jsonInput = $this->safeMethods->file_get_contents($filename);
 
-                    $jsonDecodedInput = json_decode($jsonInput);
+                    $jsonDecodedInput = $this->safeMethods->json_decode($jsonInput);
 
                     $validatorFactory = new ValidatorFactory();
 
@@ -182,7 +151,7 @@ class ConverterCommand extends Command
                     $converter->addConverter($converterImplementation);
                 } catch (JsonException $exception) {
                     $output->writeln(
-                        sprintf(
+                        $this->safeMethods->sprintf(
                             '<error>Unable to decode %s. See error code %d.</error>',
                             $filename,
                             self::EXIT_UNABLE_TO_DECODE_FILE
@@ -201,19 +170,19 @@ class ConverterCommand extends Command
             $outputFilename = $input->getOption('output');
 
             $output->writeln(
-                sprintf(
+                $this->safeMethods->sprintf(
                     '<info>Writing output to %s.</info>',
                     $outputFilename
                 )
             );
 
-            file_put_contents(
+            $this->safeMethods->file_put_contents(
                 $outputFilename,
                 $converter->getJsonEncodedOutput()
             );
         } catch (NoValidatorsEnabledException $exception) {
             $output->writeln(
-                sprintf(
+                $this->safeMethods->sprintf(
                     '<error>Please include at least 1 converter. See error code %d.</error>',
                     self::EXIT_NO_CONVERTER_INCLUDED
                 )
@@ -222,7 +191,7 @@ class ConverterCommand extends Command
             return self::EXIT_NO_CONVERTER_INCLUDED;
         } catch (FilesystemException $exception) {
             $output->writeln(
-                sprintf(
+                $this->safeMethods->sprintf(
                     '<error>Unable to write to output file. See error code %d.</error>',
                     self::EXIT_UNABLE_TO_WRITE_FILE
                 )
@@ -235,7 +204,7 @@ class ConverterCommand extends Command
             );
         } catch (UnableToGetJsonEncodedOutputException $exception) {
             $output->writeln(
-                sprintf(
+                $this->safeMethods->sprintf(
                     '<error>Unable to get JSON encoded output. See error code %d.</error>',
                     self::EXIT_UNABLE_TO_GET_ENCODED_OUTPUT
                 )
@@ -254,7 +223,7 @@ class ConverterCommand extends Command
                 strtolower($converter),
                 null,
                 InputOption::VALUE_OPTIONAL,
-                sprintf(
+                $this->safeMethods->sprintf(
                     'Include %s converter',
                     $converter
                 ),
@@ -268,14 +237,14 @@ class ConverterCommand extends Command
 
         try {
             $this->addOption(
-                sprintf(
+                $this->safeMethods->sprintf(
                     '%s-json-file',
                     strtolower($converter)
                 ),
                 null,
                 InputOption::VALUE_OPTIONAL,
                 'Location to JSON file',
-                sprintf(
+                $this->safeMethods->sprintf(
                     '%s.json',
                     strtolower($converter)
                 )
