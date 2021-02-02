@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\Command;
 
 use function basename;
+use BeechIt\JsonToCodeClimateSubsetConverter\Command\ConverterCommand;
 use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToAddOption;
 use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToCreateFilenameException;
 use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToWriteOutputLine;
@@ -16,6 +17,8 @@ use BeechIt\JsonToCodeClimateSubsetConverter\Utilities\SafeMethods;
 use function file_get_contents;
 use function json_decode;
 use PHLAK\Config\Config;
+use Safe\Exceptions\FilesystemException;
+use Safe\Exceptions\JsonException;
 use Safe\Exceptions\StringsException;
 use function sprintf;
 use function strtolower;
@@ -321,5 +324,465 @@ class CommandTest extends TestCase
             ),
             $output
         );
+    }
+
+    /**
+     * @dataProvider multipleConvertersProvider
+     */
+    public function testItFailsWhenItCanNotGetFileContents(
+        string $jsonInput,
+        string $jsonOutput,
+        string $validator,
+        string $converter,
+        array $output,
+        string $name
+    ): void {
+        // Given
+        $safeMethods = $this->getMockBuilder(SafeMethods::class)
+            ->onlyMethods(
+                [
+                    'file_get_contents',
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->getMock();
+
+        $safeMethods->method('file_get_contents')
+            ->willThrowException(new FilesystemException());
+
+        $jsonFileName = __DIR__.'/..'.$jsonInput;
+        $jsonInput = file_get_contents(__DIR__.'/..'.$jsonInput);
+        $jsonDecodedInput = json_decode($jsonInput);
+
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build($name, $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            $name,
+            $validator,
+            $jsonDecodedInput
+        );
+
+        $application = new Application();
+
+        $commandFactory = new CommandFactory();
+        $command = $commandFactory->build(
+            'convert',
+            null,
+            $safeMethods
+        );
+
+        $application->add($command);
+
+        $command = $application->find('convert');
+        $commandTester = new CommandTester($command);
+
+        $converterImplementationOptionName = sprintf(
+            '--%s',
+            strtolower($converterImplementation->getToolName())
+        );
+
+        $converterImplementationOptionFilePath = sprintf(
+            '--%s-json-file',
+            strtolower($converterImplementation->getToolName())
+        );
+
+        // When
+        $commandTester->execute(
+            [
+                $converterImplementationOptionName => true,
+                $converterImplementationOptionFilePath => $jsonFileName,
+            ]
+        );
+
+        // Then
+        $output = $commandTester->getDisplay();
+        $this->assertStringContainsString(
+            sprintf(
+                'Unable to get file contents from %s. See error code %d.',
+                $jsonFileName,
+                ConverterCommand::EXIT_UNABLE_TO_GET_FILE_CONTENTS
+            ),
+            $output
+        );
+    }
+
+    /**
+     * @dataProvider multipleConvertersProvider
+     */
+    public function testItFailsWhenItCanNotDecodeJsonFileContents(
+        string $jsonInput,
+        string $jsonOutput,
+        string $validator,
+        string $converter,
+        array $output,
+        string $name
+    ): void {
+        // Given
+        $safeMethods = $this->getMockBuilder(SafeMethods::class)
+            ->onlyMethods(
+                [
+                    'json_decode',
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->getMock();
+
+        $safeMethods->method('json_decode')
+            ->willThrowException(new JsonException());
+
+        $jsonFileName = __DIR__.'/..'.$jsonInput;
+        $jsonInput = file_get_contents(__DIR__.'/..'.$jsonInput);
+        $jsonDecodedInput = json_decode($jsonInput);
+
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build($name, $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            $name,
+            $validator,
+            $jsonDecodedInput
+        );
+
+        $application = new Application();
+
+        $commandFactory = new CommandFactory();
+        $command = $commandFactory->build(
+            'convert',
+            null,
+            $safeMethods
+        );
+
+        $application->add($command);
+
+        $command = $application->find('convert');
+        $commandTester = new CommandTester($command);
+
+        $converterImplementationOptionName = sprintf(
+            '--%s',
+            strtolower($converterImplementation->getToolName())
+        );
+
+        $converterImplementationOptionFilePath = sprintf(
+            '--%s-json-file',
+            strtolower($converterImplementation->getToolName())
+        );
+
+        // When
+        $commandTester->execute(
+            [
+                $converterImplementationOptionName => true,
+                $converterImplementationOptionFilePath => $jsonFileName,
+            ]
+        );
+
+        // Then
+        $output = $commandTester->getDisplay();
+        $this->assertStringContainsString(
+            sprintf(
+                'Unable to decode %s. See error code %d.',
+                $jsonFileName,
+                ConverterCommand::EXIT_UNABLE_TO_DECODE_FILE
+            ),
+            $output
+        );
+    }
+
+    /**
+     * @dataProvider multipleConvertersProvider
+     */
+    public function testItCanConvertJsonToCodeClimateSubset(
+        string $jsonInput,
+        string $jsonOutput,
+        string $validator,
+        string $converter,
+        array $output,
+        string $name
+    ): void {
+        // Given
+        $jsonFileName = __DIR__.'/..'.$jsonInput;
+        $jsonInput = file_get_contents(__DIR__.'/..'.$jsonInput);
+        $jsonDecodedInput = json_decode($jsonInput);
+
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build($name, $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            $name,
+            $validator,
+            $jsonDecodedInput
+        );
+
+        $application = new Application();
+
+        $commandFactory = new CommandFactory();
+        $command = $commandFactory->build('convert');
+
+        $application->add($command);
+
+        $command = $application->find('convert');
+        $commandTester = new CommandTester($command);
+
+        $converterImplementationOptionName = sprintf(
+            '--%s',
+            strtolower($converterImplementation->getToolName())
+        );
+
+        $converterImplementationOptionFilePath = sprintf(
+            '--%s-json-file',
+            strtolower($converterImplementation->getToolName())
+        );
+
+        // When
+        $commandTester->execute(
+            [
+                $converterImplementationOptionName => true,
+                $converterImplementationOptionFilePath => $jsonFileName,
+            ]
+        );
+
+        // Then
+        $output = $commandTester->getDisplay();
+        $this->assertStringContainsString(
+            'Writing output to code-climate.json.',
+            $output
+        );
+    }
+
+    /**
+     * @dataProvider multipleConvertersProvider
+     */
+    public function testItFailsWhenItCanNotWriteToOutputFile(
+        string $jsonInput,
+        string $jsonOutput,
+        string $validator,
+        string $converter,
+        array $output,
+        string $name
+    ): void {
+        // Given
+        $safeMethods = $this->getMockBuilder(SafeMethods::class)
+            ->onlyMethods(
+                [
+                    'file_put_contents',
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->getMock();
+
+        $safeMethods->method('file_put_contents')
+            ->willThrowException(new FilesystemException());
+
+        $jsonFileName = __DIR__.'/..'.$jsonInput;
+        $jsonInput = file_get_contents(__DIR__.'/..'.$jsonInput);
+        $jsonDecodedInput = json_decode($jsonInput);
+
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build($name, $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            $name,
+            $validator,
+            $jsonDecodedInput
+        );
+
+        $application = new Application();
+
+        $commandFactory = new CommandFactory();
+        $command = $commandFactory->build(
+            'convert',
+            null,
+            $safeMethods
+        );
+
+        $application->add($command);
+
+        $command = $application->find('convert');
+        $commandTester = new CommandTester($command);
+
+        $converterImplementationOptionName = sprintf(
+            '--%s',
+            strtolower($converterImplementation->getToolName())
+        );
+
+        $converterImplementationOptionFilePath = sprintf(
+            '--%s-json-file',
+            strtolower($converterImplementation->getToolName())
+        );
+
+        // When
+        $commandTester->execute(
+            [
+                $converterImplementationOptionName => true,
+                $converterImplementationOptionFilePath => $jsonFileName,
+            ]
+        );
+
+        // Then
+        $output = $commandTester->getDisplay();
+        $this->assertStringContainsString(
+            sprintf(
+                'Unable to write to output file. See error code %d.',
+                ConverterCommand::EXIT_UNABLE_TO_WRITE_FILE
+            ),
+            $output
+        );
+    }
+
+    /**
+     * @dataProvider multipleConvertersProvider
+     */
+    public function testItFailsWhenItCanNotGetEncodedOutput(
+        string $jsonInput,
+        string $jsonOutput,
+        string $validator,
+        string $converter,
+        array $output,
+        string $name
+    ): void {
+        // Given
+        $safeMethods = $this->getMockBuilder(SafeMethods::class)
+            ->onlyMethods(
+                [
+                    'json_encode',
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->getMock();
+
+        $safeMethods->method('json_encode')
+            ->willThrowException(new JsonException());
+
+        $jsonFileName = __DIR__.'/..'.$jsonInput;
+        $jsonInput = file_get_contents(__DIR__.'/..'.$jsonInput);
+        $jsonDecodedInput = json_decode($jsonInput);
+
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build($name, $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            $name,
+            $validator,
+            $jsonDecodedInput
+        );
+
+        $application = new Application();
+
+        $commandFactory = new CommandFactory();
+        $command = $commandFactory->build(
+            'convert',
+            null,
+            $safeMethods
+        );
+
+        $application->add($command);
+
+        $command = $application->find('convert');
+        $commandTester = new CommandTester($command);
+
+        $converterImplementationOptionName = sprintf(
+            '--%s',
+            strtolower($converterImplementation->getToolName())
+        );
+
+        $converterImplementationOptionFilePath = sprintf(
+            '--%s-json-file',
+            strtolower($converterImplementation->getToolName())
+        );
+
+        // When
+        $commandTester->execute(
+            [
+                $converterImplementationOptionName => true,
+                $converterImplementationOptionFilePath => $jsonFileName,
+            ]
+        );
+
+        // Then
+        $output = $commandTester->getDisplay();
+        $this->assertStringContainsString(
+            sprintf(
+                'Unable to get JSON encoded output. See error code %d.',
+                ConverterCommand::EXIT_UNABLE_TO_GET_ENCODED_OUTPUT
+            ),
+            $output
+        );
+    }
+
+    public function testItFailsWhenItCanNotInformUserAboutSuccessfullyWritingToOutput(): void
+    {
+        $this->expectException(UnableToWriteOutputLine::class);
+
+        // Given
+        $configuration = $this->createMock(Config::class);
+
+        $configuration->method('get')
+            ->with('converters')
+            ->willReturn(
+                [
+                    'Converter-name',
+                ]
+            );
+
+        $safeMethods = $this->createMock(SafeMethods::class);
+
+        $safeMethods->method('sprintf')
+            ->will(
+                $this->onConsecutiveCalls(
+                    '',
+                    'converter-name-json-file',
+                    'converter-name.json',
+                    'converter-name-json-file',
+                    'converter-name-json-file.json',
+                    $this->throwException(new StringsException())
+                )
+            );
+
+        $application = new Application();
+
+        $commandFactory = new CommandFactory();
+        $command = $commandFactory->build(
+            'convert',
+            $configuration,
+            $safeMethods
+        );
+
+        $application->add($command);
+
+        $command = $application->find('convert');
+        $commandTester = new CommandTester($command);
+
+        // When
+        $commandTester->execute([
+            '--converter-name' => true,
+            '--converter-name-json-file' => 'converter-name-json-file.json',
+        ]);
     }
 }

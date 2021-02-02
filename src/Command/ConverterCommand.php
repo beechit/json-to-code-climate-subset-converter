@@ -14,6 +14,7 @@ use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToWriteOutputLine;
 use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ConverterFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ValidatorFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\SafeMethodsInterface;
+use function dump;
 use function file_exists;
 use PHLAK\Config\Config;
 use Safe\Exceptions\FilesystemException;
@@ -33,6 +34,7 @@ class ConverterCommand extends Command
     const EXIT_NO_CONVERTER_INCLUDED = 3;
     const EXIT_UNABLE_TO_WRITE_FILE = 4;
     const EXIT_UNABLE_TO_GET_ENCODED_OUTPUT = 5;
+    const EXIT_UNABLE_TO_GET_FILE_CONTENTS = 6;
 
     /**
      * @var Config
@@ -76,7 +78,7 @@ class ConverterCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $converter = new Converter();
+        $converter = new Converter($this->safeMethods);
         $exitCode = self::EXIT_NO_ERRORS;
 
         /**
@@ -159,6 +161,16 @@ class ConverterCommand extends Command
                     );
 
                     return self::EXIT_UNABLE_TO_DECODE_FILE;
+                } catch (FilesystemException $exception) {
+                    $output->writeln(
+                        $this->safeMethods->sprintf(
+                            '<error>Unable to get file contents from %s. See error code %d.</error>',
+                            $filename,
+                            self::EXIT_UNABLE_TO_GET_FILE_CONTENTS
+                        )
+                    );
+
+                    return self::EXIT_UNABLE_TO_DECODE_FILE;
                 }
             }
         }
@@ -169,16 +181,16 @@ class ConverterCommand extends Command
             /** @var string $outputFilename */
             $outputFilename = $input->getOption('output');
 
+            $this->safeMethods->file_put_contents(
+                $outputFilename,
+                $converter->getJsonEncodedOutput()
+            );
+
             $output->writeln(
                 $this->safeMethods->sprintf(
                     '<info>Writing output to %s.</info>',
                     $outputFilename
                 )
-            );
-
-            $this->safeMethods->file_put_contents(
-                $outputFilename,
-                $converter->getJsonEncodedOutput()
             );
         } catch (NoValidatorsEnabledException $exception) {
             $output->writeln(
@@ -199,6 +211,7 @@ class ConverterCommand extends Command
 
             return self::EXIT_UNABLE_TO_WRITE_FILE;
         } catch (StringsException $exception) {
+            dump(__LINE__);
             throw new UnableToWriteOutputLine(
                 $exception->getMessage()
             );
