@@ -747,20 +747,30 @@ class CommandTest extends TestCase
             ->with('converters')
             ->willReturn(
                 [
-                    'Converter-name',
+                    'PHPLint',
                 ]
             );
 
-        $safeMethods = $this->createMock(SafeMethods::class);
+        $safeMethods = $this->getMockBuilder(SafeMethods::class)
+            ->onlyMethods(
+                [
+                    'sprintf',
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->getMock();
 
         $safeMethods->method('sprintf')
             ->will(
                 $this->onConsecutiveCalls(
                     '',
-                    'converter-name-json-file',
-                    'converter-name.json',
-                    'converter-name-json-file',
-                    'converter-name-json-file.json',
+                    'phplint-json-file',
+                    'phplint.json',
+                    'phplint-json-file',
+                    'phplint-json-file.json',
                     $this->throwException(new StringsException())
                 )
             );
@@ -781,8 +791,8 @@ class CommandTest extends TestCase
 
         // When
         $commandTester->execute([
-            '--converter-name' => true,
-            '--converter-name-json-file' => 'converter-name-json-file.json',
+            '--phplint' => true,
+            '--phplint-json-file' => __DIR__.'/../fixtures/input.json',
         ]);
     }
 }

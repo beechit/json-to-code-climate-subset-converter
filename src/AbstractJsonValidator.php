@@ -11,10 +11,12 @@ use function debug_backtrace;
 
 abstract class AbstractJsonValidator implements JsonValidatorInterface
 {
+    const DEBUG_BACKTRACE_LIMIT = 2;
+
     /**
      * @var array
      */
-    protected $json = [];
+    protected $json;
 
     /**
      * AbstractJsonValidator constructor.
@@ -23,7 +25,7 @@ abstract class AbstractJsonValidator implements JsonValidatorInterface
      */
     public function __construct($json)
     {
-        $backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, self::DEBUG_BACKTRACE_LIMIT);
         $constructingClass = $backtrace[1]['class'];
 
         if (ValidatorFactory::class !== $constructingClass) {

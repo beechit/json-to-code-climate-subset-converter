@@ -9,7 +9,7 @@ use BeechIt\JsonToCodeClimateSubsetConverter\AbstractJsonValidator;
 interface ValidatorFactoryInterface
 {
     public function build(
-        string $converterName,
+        string $validatorName,
         $json
     ): AbstractJsonValidator;
 }

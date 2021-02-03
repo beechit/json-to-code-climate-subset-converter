@@ -16,11 +16,11 @@ final class PsalmConvertToSubset extends AbstractConverter
 
             foreach ($this->json as $node) {
                 $this->codeClimateNodes[] = [
-                    'description' => $this->createDescription($node->message),
+                    'description' => $this->createDescription((string) $node->message),
                     'fingerprint' => $this->createFingerprint(
-                        $node->message,
-                        $node->file_name,
-                        $node->line_from
+                        (string) $node->message,
+                        (string) $node->file_name,
+                        (int) $node->line_from
                     ),
                     'location' => [
                         'path' => $node->file_name,

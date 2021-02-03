@@ -17,6 +17,8 @@ use Safe\Exceptions\StringsException;
 
 abstract class AbstractConverter implements OutputInterface, ConvertToSubsetInterface
 {
+    const DEBUG_BACKTRACE_LIMIT = 2;
+
     /**
      * @var AbstractJsonValidator
      */
@@ -45,9 +47,9 @@ abstract class AbstractConverter implements OutputInterface, ConvertToSubsetInte
     public function __construct(
         AbstractJsonValidator $abstractJsonValidator,
         $json,
-        SafeMethodsInterface $safeMethods = null
+        SafeMethodsInterface $safeMethods
     ) {
-        $backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, self::DEBUG_BACKTRACE_LIMIT);
         $constructingClass = $backtrace[1]['class'];
 
         if (ConverterFactory::class !== $constructingClass) {

@@ -22,7 +22,7 @@ class Converter implements ConvertToSubsetInterface, OutputInterface
     /**
      * @var AbstractConverter[]
      */
-    private $converters;
+    private $converters = [];
 
     /**
      * @var SafeMethodsInterface

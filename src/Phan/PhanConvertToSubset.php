@@ -16,11 +16,11 @@ final class PhanConvertToSubset extends AbstractConverter
 
             foreach ($this->json as $node) {
                 $this->codeClimateNodes[] = [
-                    'description' => $this->createDescription($node->description),
+                    'description' => $this->createDescription((string) $node->description),
                     'fingerprint' => $this->createFingerprint(
-                        $node->description,
-                        $node->location->path,
-                        $node->location->lines->begin
+                        (string) $node->description,
+                        (string) $node->location->path,
+                        (int) $node->location->lines->begin
                     ),
                     'location' => [
                         'path' => $node->location->path,

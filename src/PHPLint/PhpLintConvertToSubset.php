@@ -16,11 +16,11 @@ class PhpLintConvertToSubset extends AbstractConverter
 
             foreach ($this->json->errors as $node) {
                 $this->codeClimateNodes[] = [
-                    'description' => $this->createDescription($node->error),
+                    'description' => $this->createDescription((string) $node->error),
                     'fingerprint' => $this->createFingerprint(
-                        $node->error,
-                        $node->file_name,
-                        $node->line
+                        (string) $node->error,
+                        (string) $node->file_name,
+                        (int) $node->line
                     ),
                     'location' => [
                         'path' => $node->file_name,

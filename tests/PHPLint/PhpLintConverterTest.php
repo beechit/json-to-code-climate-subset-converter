@@ -204,10 +204,13 @@ class PhpLintConverterTest extends TestCase
 
         $validator = $validatorFactory->build('PHPLint', $jsonDecodedInput);
 
+        $safeMethods = new SafeMethods();
+
         // When
         new PhpLintConvertToSubset(
             $validator,
-            $jsonDecodedInput
+            $jsonDecodedInput,
+            $safeMethods
         );
     }
 }

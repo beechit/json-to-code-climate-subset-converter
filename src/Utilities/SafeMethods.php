@@ -8,8 +8,11 @@ use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\SafeMethodsInterface;
 
 class SafeMethods implements SafeMethodsInterface
 {
-    public function json_encode($value, int $options = 0, int $depth = 512): string
-    {
+    public function json_encode(
+        $value,
+        int $options = self::JSON_ENCODE_OPTIONS,
+        int $depth = self::JSON_ENCODE_DEPTH
+    ): string {
         return \Safe\json_encode(
             $value,
             $options,
@@ -17,8 +20,12 @@ class SafeMethods implements SafeMethodsInterface
         );
     }
 
-    public function json_decode(string $json, bool $assoc = false, int $depth = 512, int $options = 0)
-    {
+    public function json_decode(
+        string $json,
+        bool $assoc = false,
+        int $depth = self::JSON_DECODE_DEPTH,
+        int $options = self::JSON_DECODE_OPTIONS
+    ) {
         return \Safe\json_decode($json, $assoc, $depth, $options);
     }
 
@@ -30,8 +37,12 @@ class SafeMethods implements SafeMethodsInterface
         );
     }
 
-    public function file_put_contents(string $filename, $data, int $flags = 0, $context = null): int
-    {
+    public function file_put_contents(
+        string $filename,
+        $data,
+        int $flags = self::FILE_PUT_CONTENTS_FLAGS,
+        $context = null
+    ): int {
         return \Safe\file_put_contents(
             $filename,
             $data,
@@ -40,14 +51,8 @@ class SafeMethods implements SafeMethodsInterface
         );
     }
 
-    public function file_get_contents(string $filename, bool $use_include_path = false, $context = null, int $offset = 0, int $maxlen = null): string
+    public function file_get_contents(string $filename): string
     {
-        return \Safe\file_get_contents(
-            $filename,
-            $use_include_path,
-            $context,
-            $offset,
-            $maxlen
-        );
+        return \Safe\file_get_contents($filename);
     }
 }

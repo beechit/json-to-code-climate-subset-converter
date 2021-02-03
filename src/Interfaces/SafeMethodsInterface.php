@@ -10,19 +10,34 @@ use Safe\Exceptions\StringsException;
 
 interface SafeMethodsInterface
 {
+    const JSON_ENCODE_OPTIONS = 0;
+    const JSON_ENCODE_DEPTH = 512;
+    const JSON_DECODE_OPTIONS = 0;
+    const JSON_DECODE_DEPTH = 512;
+    const FILE_PUT_CONTENTS_FLAGS = 0;
+
     /**
      * @param $value
      *
      * @throws JsonException
      */
-    public function json_encode($value, int $options = 0, int $depth = 512): string;
+    public function json_encode(
+        $value,
+        int $options = self::JSON_ENCODE_OPTIONS,
+        int $depth = self::JSON_ENCODE_DEPTH
+    ): string;
 
     /**
      * @throws JsonException
      *
      * @return mixed
      */
-    public function json_decode(string $json, bool $assoc = false, int $depth = 512, int $options = 0);
+    public function json_decode(
+        string $json,
+        bool $assoc = false,
+        int $depth = self::JSON_DECODE_DEPTH,
+        int $options = self::JSON_DECODE_OPTIONS
+    );
 
     /**
      * @param mixed ...$params
@@ -32,17 +47,22 @@ interface SafeMethodsInterface
     public function sprintf(string $format, ...$params): string;
 
     /**
-     * @param $data
-     * @param null $context
+     * @param mixed $data
+     * @param null  $context
      *
      * @throws FilesystemException
+     *
+     * @return mixed
      */
-    public function file_put_contents(string $filename, $data, int $flags = 0, $context = null): int;
+    public function file_put_contents(
+        string $filename,
+        $data,
+        int $flags = self::FILE_PUT_CONTENTS_FLAGS,
+        $context = null
+    );
 
     /**
-     * @param null $context
-     *
-     * @throws FilesystemException
+     * @return mixed
      */
-    public function file_get_contents(string $filename, bool $use_include_path = false, $context = null, int $offset = 0, int $maxlen = null): string;
+    public function file_get_contents(string $filename);
 }

@@ -14,7 +14,6 @@ use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\UnableToWriteOutputLine;
 use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ConverterFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ValidatorFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\SafeMethodsInterface;
-use function dump;
 use function file_exists;
 use PHLAK\Config\Config;
 use Safe\Exceptions\FilesystemException;
@@ -59,6 +58,7 @@ class ConverterCommand extends Command
 
     protected function configure(): void
     {
+        /** @var string $converter */
         foreach ($this->configuration->get('converters') as $converter) {
             try {
                 $this->option($converter);
@@ -82,7 +82,6 @@ class ConverterCommand extends Command
         $exitCode = self::EXIT_NO_ERRORS;
 
         /**
-         * @var string $converterName
          * @var string $supportedConverter
          */
         foreach ($this->configuration->get('converters') as $supportedConverter) {
@@ -128,6 +127,7 @@ class ConverterCommand extends Command
                 }
 
                 try {
+                    /** @var string $jsonInput */
                     $jsonInput = $this->safeMethods->file_get_contents($filename);
 
                     $jsonDecodedInput = $this->safeMethods->json_decode($jsonInput);
@@ -211,7 +211,6 @@ class ConverterCommand extends Command
 
             return self::EXIT_UNABLE_TO_WRITE_FILE;
         } catch (StringsException $exception) {
-            dump(__LINE__);
             throw new UnableToWriteOutputLine(
                 $exception->getMessage()
             );
@@ -242,13 +241,7 @@ class ConverterCommand extends Command
                 ),
                 false
             );
-        } catch (StringsException $exception) {
-            throw new UnableToAddOption(
-                $exception->getMessage()
-            );
-        }
 
-        try {
             $this->addOption(
                 $this->safeMethods->sprintf(
                     '%s-json-file',
