@@ -7,9 +7,9 @@ CLI tool that'll convert supported JSON files to a subset of the Code Climate JS
 
 Please note this project is actively worked on but it's not ready for production use.
 
-- [ ] Write better exceptions for when file can't be found
-  - [ ] Use [Safe](https://github.com/thecodingmachine/safe)
-- [ ] Write tests for console command
+- [x] Write better exceptions for when file can't be found
+  - [x] Use [Safe](https://github.com/thecodingmachine/safe)
+- [x] Write tests for console command
 - [ ] Add static analysis
   - [x] [phpstan](https://github.com/phpstan/phpstan)
   - [x] [psalm](https://github.com/vimeo/psalm)
