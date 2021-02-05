@@ -17,11 +17,11 @@ final class PhpCodeSnifferConvertToSubset extends AbstractConverter
             foreach ($this->json->files as $filename => $file) {
                 foreach ($file->messages as $node) {
                     $this->codeClimateNodes[] = [
-                        'description' => $this->createDescription((string) $node->message),
+                        'description' => $this->createDescription($node->message),
                         'fingerprint' => $this->createFingerprint(
-                            (string) $node->message,
-                            (string) $filename,
-                            (int) $node->line
+                            $node->message,
+                            $filename,
+                            $node->line
                         ),
                         'location' => [
                             'path' => $filename,
