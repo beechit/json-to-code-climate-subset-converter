@@ -102,20 +102,6 @@ If you're working on a project that supports multiple tools, you're free to add 
 php converter convert --phpstan --psalm --phpcs
 ```
 
-## Running the CLI command in Docker
-
-### To build the docker image:
-```shell
-docker build -t converter .
-```
-
-### To use the image to convert
-```shell
-docker run --rm -t -v $(pwd):/project -w /project converter convert --phpstan
-```
-This will mount the current directory in the container under `/project`, and execute the converter.
-This will also remove the container after use.
-
 ## JSON output
 
 By default a `code-climate.json` file is generated for you to use.
