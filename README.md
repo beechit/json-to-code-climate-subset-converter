@@ -9,7 +9,7 @@ Please note this project is actively worked on but it's not ready for production
 
 - [ ] Write better exceptions for when file can't be found
   - [ ] Use [Safe](https://github.com/thecodingmachine/safe)
-- [ ] Write tests for console command
+- [x] Write tests for console command
 - [ ] Add static analysis
   - [x] [phpstan](https://github.com/phpstan/phpstan)
   - [x] [psalm](https://github.com/vimeo/psalm)
