@@ -8,6 +8,7 @@ $autoloadFiles = [
     __DIR__.'/../vendor/autoload.php',
     __DIR__.'/../../vendor/autoload.php',
     __DIR__.'/../../../vendor/autoload.php',
+    __DIR__.'/../../../../vendor/autoload.php',
 ];
 
 foreach ($autoloadFiles as $autoloadFile) {
