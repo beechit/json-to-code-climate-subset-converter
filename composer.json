@@ -62,6 +62,7 @@
     "scripts": {
         "phpunit": "vendor/bin/phpunit",
         "infection": "vendor/bin/infection",
+        "infection-ci": "XDEBUG_MODE=coverage vendor/bin/infection",
         "phpstan": "vendor/bin/phpstan analyse src --level max",
         "psalm": "vendor/bin/psalm src",
         "phplint": "vendor/bin/phplint src",
