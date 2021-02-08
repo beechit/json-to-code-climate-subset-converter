@@ -8,6 +8,8 @@ use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer\PhpCodeSnifferConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer\PhpCodeSnifferJsonValidator;
+use BeechIt\JsonToCodeClimateSubsetConverter\PHPCSFixer\PHPCSFixerConvertToSubset;
+use BeechIt\JsonToCodeClimateSubsetConverter\PHPCSFixer\PHPCSFixerJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPLint\PhpLintConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPLint\PhpLintJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanConvertToSubset;
@@ -110,6 +112,23 @@ class TestCase extends BaseTestCase
                     ],
                 ],
                 'name' => 'Psalm',
+            ],
+            'PHP-CS-Fixer' => [
+                'jsonInput' => '/PHPCSFixer/fixtures/input.json',
+                'jsonOutput' => '/PHPCSFixer/fixtures/output.json',
+                'validator' => PHPCSFixerJsonValidator::class,
+                'converter' => PHPCSFixerConvertToSubset::class,
+                'output' => [
+                    'description' => '(PHP-CS-Fixer) no_unused_imports',
+                    'fingerprint' => '2b59a749eafbae30d4960873cc966ad1',
+                    'location' => [
+                        'path' => 'app/Class.php',
+                        'lines' => [
+                            'begin' => 0,
+                        ],
+                    ],
+                ],
+                'name' => 'PHP-CS-Fixer',
             ],
         ];
     }

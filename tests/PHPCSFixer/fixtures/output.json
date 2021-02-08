@@ -1,0 +1,12 @@
+[
+    {
+        "description": "(PHP-CS-Fixer) no_unused_imports",
+        "fingerprint": "2b59a749eafbae30d4960873cc966ad1",
+        "location": {
+            "path": "app/Class.php",
+            "lines": {
+                "begin": 0
+            }
+        }
+    }
+]
