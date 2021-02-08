@@ -9,5 +9,6 @@ return [
         'PHPLint',
         'PHPStan',
         'Psalm',
+        'PHP-CS-Fixer',
     ],
 ];

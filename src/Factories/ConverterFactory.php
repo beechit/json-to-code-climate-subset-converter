@@ -11,6 +11,7 @@ use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\ConverterFactoryInterfac
 use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\SafeMethodsInterface;
 use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer\PhpCodeSnifferConvertToSubset;
+use BeechIt\JsonToCodeClimateSubsetConverter\PHPCSFixer\PHPCSFixerConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPLint\PhpLintConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanConvertToSubset;
 use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmConvertToSubset;
@@ -64,6 +65,14 @@ class ConverterFactory implements ConverterFactoryInterface
                 break;
             case 'Psalm':
                 $converter = new PsalmConvertToSubset(
+                    $validator,
+                    $json,
+                    $safeMethods
+                );
+
+                break;
+            case 'PHP-CS-Fixer':
+                $converter = new PHPCSFixerConvertToSubset(
                     $validator,
                     $json,
                     $safeMethods

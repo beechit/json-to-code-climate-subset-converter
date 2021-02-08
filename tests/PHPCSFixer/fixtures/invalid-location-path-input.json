@@ -1,0 +1,12 @@
+[
+    {
+        "description": "no_unused_imports",
+        "fingerprint": "4c6c9d61954474b2ddfa2bbc062cb74f",
+        "location": {
+            "lines": {
+                "begin": 0
+            }
+        }
+    }
+]
+

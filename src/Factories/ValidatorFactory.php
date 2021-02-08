@@ -9,6 +9,7 @@ use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\NoValidatorsEnabledExcep
 use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\ValidatorFactoryInterface;
 use BeechIt\JsonToCodeClimateSubsetConverter\Phan\PhanJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHP_CodeSniffer\PhpCodeSnifferJsonValidator;
+use BeechIt\JsonToCodeClimateSubsetConverter\PHPCSFixer\PHPCSFixerJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPLint\PhpLintJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\PHPStan\PHPStanJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Psalm\PsalmJsonValidator;
@@ -41,6 +42,10 @@ class ValidatorFactory implements ValidatorFactoryInterface
                 break;
             case 'Psalm':
                 $validator = new PsalmJsonValidator($json);
+
+                break;
+            case 'PHP-CS-Fixer':
+                $validator = new PHPCSFixerJsonValidator($json);
 
                 break;
         }
