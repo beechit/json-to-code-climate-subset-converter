@@ -11,6 +11,7 @@ CLI tool that'll convert supported JSON files to a subset of the Code Climate JS
 - [x] [phpcs](https://github.com/squizlabs/PHP_CodeSniffer)
 - [ ] [phpmd](https://github.com/phpmd/phpmd)
 - [x] [phplint](https://github.com/overtrue/phplint)
+- [x] [php-cs-fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)
 
 ## Example input
 
