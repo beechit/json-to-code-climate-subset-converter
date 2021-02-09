@@ -34,6 +34,7 @@ class ConverterCommand extends Command
     const EXIT_UNABLE_TO_WRITE_FILE = 4;
     const EXIT_UNABLE_TO_GET_ENCODED_OUTPUT = 5;
     const EXIT_UNABLE_TO_GET_FILE_CONTENTS = 6;
+    const EXIT_FAIL_ON_CONVERT = 7;
 
     /**
      * @var Config
@@ -73,6 +74,14 @@ class ConverterCommand extends Command
             InputOption::VALUE_OPTIONAL,
             'Where to output JSON',
             'code-climate.json'
+        );
+
+        $this->addOption(
+            'fail-on-convert',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'Return non-zero exit code when errors were converted',
+            false
         );
     }
 
@@ -223,6 +232,13 @@ class ConverterCommand extends Command
             );
 
             return self::EXIT_UNABLE_TO_WRITE_FILE;
+        }
+
+        if (
+            false !== $input->getOption('fail-on-convert')
+            && count($converter->getOutput()) > 0
+        ) {
+            return self::EXIT_FAIL_ON_CONVERT;
         }
 
         return $exitCode;
