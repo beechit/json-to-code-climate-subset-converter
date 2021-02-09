@@ -795,4 +795,187 @@ class CommandTest extends TestCase
             '--phplint-json-file' => __DIR__.'/../fixtures/input.json',
         ]);
     }
+
+    /**
+     * @dataProvider multipleConvertersProvider
+     */
+    public function testItCanConvertJsonToCodeClimateSubsetAndOptionallyFailWithNonZeroExitCode(
+        string $jsonInput,
+        string $jsonOutput,
+        string $validator,
+        string $converter,
+        array $output,
+        string $name
+    ): void {
+        // Given
+        $jsonFileName = __DIR__.'/..'.$jsonInput;
+        $jsonInput = file_get_contents(__DIR__.'/..'.$jsonInput);
+        $jsonDecodedInput = json_decode($jsonInput);
+
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build($name, $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            $name,
+            $validator,
+            $jsonDecodedInput
+        );
+
+        $application = new Application();
+
+        $commandFactory = new CommandFactory();
+        $command = $commandFactory->build('convert');
+
+        $application->add($command);
+
+        $command = $application->find('convert');
+        $commandTester = new CommandTester($command);
+
+        $converterImplementationOptionName = sprintf(
+            '--%s',
+            strtolower($converterImplementation->getToolName())
+        );
+
+        $converterImplementationOptionFilePath = sprintf(
+            '--%s-json-file',
+            strtolower($converterImplementation->getToolName())
+        );
+
+        // When
+        $commandTester->execute(
+            [
+                $converterImplementationOptionName => true,
+                $converterImplementationOptionFilePath => $jsonFileName,
+                '--fail-on-convert' => true,
+            ]
+        );
+
+        // Then
+        $this->assertEquals(
+            ConverterCommand::EXIT_FAIL_ON_CONVERT,
+            $commandTester->getStatusCode()
+        );
+    }
+
+    public function testItExitsWithZeroExitCodeWhenNoErrorsWereConvertedWhenFailOnConvertIsEnabled(): void
+    {
+        // Given
+        $jsonFileName = __DIR__.'/../fixtures/empty-input.json';
+        $jsonInput = file_get_contents(__DIR__.'/../fixtures/empty-input.json');
+        $jsonDecodedInput = json_decode($jsonInput);
+
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build('PHPStan', $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            'PHPStan',
+            $validator,
+            $jsonDecodedInput
+        );
+
+        $application = new Application();
+
+        $commandFactory = new CommandFactory();
+        $command = $commandFactory->build('convert');
+
+        $application->add($command);
+
+        $command = $application->find('convert');
+        $commandTester = new CommandTester($command);
+
+        $converterImplementationOptionName = sprintf(
+            '--%s',
+            strtolower($converterImplementation->getToolName())
+        );
+
+        $converterImplementationOptionFilePath = sprintf(
+            '--%s-json-file',
+            strtolower($converterImplementation->getToolName())
+        );
+
+        // When
+        $commandTester->execute(
+            [
+                $converterImplementationOptionName => true,
+                $converterImplementationOptionFilePath => $jsonFileName,
+                '--fail-on-convert' => true,
+            ]
+        );
+
+        // Then
+        $this->assertEquals(
+            ConverterCommand::EXIT_NO_ERRORS,
+            $commandTester->getStatusCode()
+        );
+    }
+
+    /**
+     * @dataProvider multipleConvertersProvider
+     */
+    public function testItExitsWithZeroExitCodeWhenErrorsWereConvertedWhenFailOnConvertIsDisabledByDefault(
+        string $jsonInput,
+        string $jsonOutput,
+        string $validator,
+        string $converter,
+        array $output,
+        string $name
+    ): void
+    {
+        // Given
+        $jsonFileName = __DIR__.'/..'.$jsonInput;
+        $jsonInput = file_get_contents(__DIR__.'/..'.$jsonInput);
+        $jsonDecodedInput = json_decode($jsonInput);
+
+        $validatorFactory = new ValidatorFactory();
+
+        $validator = $validatorFactory->build($name, $jsonDecodedInput);
+
+        $converterFactory = new ConverterFactory();
+
+        $converterImplementation = $converterFactory->build(
+            $name,
+            $validator,
+            $jsonDecodedInput
+        );
+
+        $application = new Application();
+
+        $commandFactory = new CommandFactory();
+        $command = $commandFactory->build('convert');
+
+        $application->add($command);
+
+        $command = $application->find('convert');
+        $commandTester = new CommandTester($command);
+
+        $converterImplementationOptionName = sprintf(
+            '--%s',
+            strtolower($converterImplementation->getToolName())
+        );
+
+        $converterImplementationOptionFilePath = sprintf(
+            '--%s-json-file',
+            strtolower($converterImplementation->getToolName())
+        );
+
+        // When
+        $commandTester->execute(
+            [
+                $converterImplementationOptionName => true,
+                $converterImplementationOptionFilePath => $jsonFileName
+            ]
+        );
+
+        // Then
+        $this->assertEquals(
+            ConverterCommand::EXIT_NO_ERRORS,
+            $commandTester->getStatusCode()
+        );
+    }
 }
