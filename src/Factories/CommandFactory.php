@@ -18,8 +18,7 @@ class CommandFactory implements CommandFactoryInterface
         Config $configuration = null,
         SafeMethodsInterface $safeMethods = null
     ): Command {
-        $configuration = $configuration ?: new Config(__DIR__.'/../../config/converters.php');
-
+        $configuration = $configuration ?: new Config(include __DIR__.'/../../config/converters.php');
         $safeMethods = $safeMethods ?: new SafeMethods();
 
         return new ConverterCommand(
