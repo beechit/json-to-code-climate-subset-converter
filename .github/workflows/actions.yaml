@@ -20,7 +20,7 @@ jobs:
           - infection-ci
           - phan
           - php-cbf
-          - phpcs
+          - php-cs
           - phplint
           - phpstan
           - phpunit
