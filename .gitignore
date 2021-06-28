@@ -8,3 +8,4 @@ coverage
 .phplint-cache
 .php_cs.cache
 code-climate.json
+infection.log

@@ -17,7 +17,7 @@ interface SafeMethodsInterface
     const FILE_PUT_CONTENTS_FLAGS = 0;
 
     /**
-     * @param $value
+     * @param mixed $value
      *
      * @throws JsonException
      */
@@ -47,8 +47,8 @@ interface SafeMethodsInterface
     public function sprintf(string $format, ...$params): string;
 
     /**
-     * @param mixed $data
-     * @param null  $context
+     * @param mixed      $data
+     * @param null|mixed $context
      *
      * @throws FilesystemException
      *
