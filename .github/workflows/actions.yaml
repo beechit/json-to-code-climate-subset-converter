@@ -17,14 +17,10 @@ jobs:
           - 7.3
           - 7.4
         suite:
-          - infection-ci
-          - phan
-          - php-cbf
-          - php-cs
+          - php-cs-fixer-ci
           - phplint
-          - phpstan
           - phpunit
-          - psalm
+          - infection-ci
 
     name: PHP ${{ matrix.php }} testing ${{ matrix.suite }}
     steps:

@@ -39,6 +39,7 @@ class ConverterFactory implements ConverterFactoryInterface
                 );
 
                 break;
+
             case 'PHP_CodeSniffer':
                 $converter = new PhpCodeSnifferConvertToSubset(
                     $validator,
@@ -47,6 +48,7 @@ class ConverterFactory implements ConverterFactoryInterface
                 );
 
                 break;
+
             case 'PHPLint':
                 $converter = new PhpLintConvertToSubset(
                     $validator,
@@ -55,6 +57,7 @@ class ConverterFactory implements ConverterFactoryInterface
                 );
 
                 break;
+
             case 'PHPStan':
                 $converter = new PHPStanConvertToSubset(
                     $validator,
@@ -63,6 +66,7 @@ class ConverterFactory implements ConverterFactoryInterface
                 );
 
                 break;
+
             case 'Psalm':
                 $converter = new PsalmConvertToSubset(
                     $validator,
@@ -71,6 +75,7 @@ class ConverterFactory implements ConverterFactoryInterface
                 );
 
                 break;
+
             case 'PHP-CS-Fixer':
                 $converter = new PHPCSFixerConvertToSubset(
                     $validator,

@@ -67,6 +67,7 @@
         "psalm": "vendor/bin/psalm src",
         "phplint": "vendor/bin/phplint src",
         "php-cs-fixer": "vendor/bin/php-cs-fixer fix",
+        "php-cs-fixer-ci": "vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation",
         "php-cbf": "vendor/bin/phpcbf src --standard=PSR1,PSR2,PSR12",
         "php-cs": "vendor/bin/phpcs src --standard=PSR1,PSR2,PSR12",
         "phan": "vendor/bin/phan --allow-polyfill-parser src",
