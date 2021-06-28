@@ -37,7 +37,7 @@
         "friendsofphp/php-cs-fixer": "^2.16",
         "infection/infection": "^0.18.2",
         "overtrue/phplint": "^1.2",
-        "phan/phan": "^2.4",
+        "phan/phan": "^4.0",
         "phpstan/phpstan": "^0.12.7",
         "phpunit/phpunit": "^8.0",
         "rector/rector": "^0.6.13",
