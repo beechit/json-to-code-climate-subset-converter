@@ -28,22 +28,27 @@ class ValidatorFactory implements ValidatorFactoryInterface
                 $validator = new PhanJsonValidator($json);
 
                 break;
+
             case 'PHP_CodeSniffer':
                 $validator = new PhpCodeSnifferJsonValidator($json);
 
                 break;
+
             case 'PHPLint':
                 $validator = new PhpLintJsonValidator($json);
 
                 break;
+
             case 'PHPStan':
                 $validator = new PHPStanJsonValidator($json);
 
                 break;
+
             case 'Psalm':
                 $validator = new PsalmJsonValidator($json);
 
                 break;
+
             case 'PHP-CS-Fixer':
                 $validator = new PHPCSFixerJsonValidator($json);
 

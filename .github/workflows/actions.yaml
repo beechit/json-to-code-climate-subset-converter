@@ -17,7 +17,7 @@ jobs:
           - 7.3
           - 7.4
         suite:
-          - php-cs-fixer
+          - php-cs-fixer-ci
           - phplint
           - phpunit
           - infection-ci

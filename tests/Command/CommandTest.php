@@ -925,8 +925,7 @@ class CommandTest extends TestCase
         string $converter,
         array $output,
         string $name
-    ): void
-    {
+    ): void {
         // Given
         $jsonFileName = __DIR__.'/..'.$jsonInput;
         $jsonInput = file_get_contents(__DIR__.'/..'.$jsonInput);
@@ -968,7 +967,7 @@ class CommandTest extends TestCase
         $commandTester->execute(
             [
                 $converterImplementationOptionName => true,
-                $converterImplementationOptionFilePath => $jsonFileName
+                $converterImplementationOptionFilePath => $jsonFileName,
             ]
         );
 
