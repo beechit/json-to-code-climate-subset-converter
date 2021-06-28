@@ -50,5 +50,5 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
-      - name: Run PHPLint
+      - name: Run ${{ matrix.suite }}
         run: composer ${{ matrix.suite }}
