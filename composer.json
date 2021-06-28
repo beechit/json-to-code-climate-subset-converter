@@ -59,8 +59,14 @@
     "scripts": {
         "phpunit": "vendor/bin/phpunit",
         "phpunit-ci": "vendor/bin/phpunit && vendor/bin/coverage-check build/coverage/clover.xml 100",
-        "infection": "vendor/bin/infection --coverage=build/coverage",
-        "infection-ci": "XDEBUG_MODE=coverage vendor/bin/infection --coverage=build/coverage --min-msi=100 --min-covered-msi=100",
+        "infection": [
+            "phpunit",
+            "vendor/bin/infection --coverage=build/coverage"
+        ],
+        "infection-ci": [
+            "phpunit",
+            "XDEBUG_MODE=coverage vendor/bin/infection --coverage=build/coverage --min-msi=100 --min-covered-msi=100"
+        ],
         "phpstan": "vendor/bin/phpstan analyse src --level max",
         "psalm": "vendor/bin/psalm src",
         "phplint": "vendor/bin/phplint src",
