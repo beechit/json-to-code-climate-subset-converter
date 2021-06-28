@@ -20,13 +20,13 @@ jobs:
           - infection-ci
           - phan
           - php-cbf
-          - phpcs
+          - php-cs
           - phplint
           - phpstan
           - phpunit
           - psalm
 
-    name: PHP ${{ matrix.php-versions }} testing ${{ matrix.suite }}
+    name: PHP ${{ matrix.php }} testing ${{ matrix.suite }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -44,11 +44,11 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}-${{ matrix.php }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}-${{ matrix.php }}
           restore-keys: ${{ runner.os }}-composer-${{ matrix.php }}-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
+        run: composer install --prefer-dist --no-progress
 
       - name: Run ${{ matrix.suite }}
         run: composer ${{ matrix.suite }}
