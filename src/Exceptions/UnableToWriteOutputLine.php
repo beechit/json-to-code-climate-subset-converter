@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Exceptions;
 
-class UnableToWriteOutputLine extends \Exception
+use Exception;
+
+class UnableToWriteOutputLine extends Exception
 {
 }

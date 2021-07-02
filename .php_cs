@@ -15,6 +15,7 @@ return PhpCsFixer\Config::create()
         'multiline_whitespace_before_semicolons' => [
             'strategy' => 'no_multi_line',
         ],
+        'global_namespace_import' => true,
     ])
     ->setFinder(PhpCsFixer\Finder::create()
         ->exclude('vendor')

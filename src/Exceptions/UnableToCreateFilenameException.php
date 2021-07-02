@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Exceptions;
 
-class UnableToCreateFilenameException extends \Exception
+use Exception;
+
+class UnableToCreateFilenameException extends Exception
 {
 }

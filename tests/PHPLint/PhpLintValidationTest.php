@@ -11,6 +11,7 @@ use BeechIt\JsonToCodeClimateSubsetConverter\PHPLint\PhpLintJsonValidator;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
 use function file_get_contents;
 use function json_decode;
+use LogicException;
 
 /**
  * @internal
@@ -119,7 +120,7 @@ class PhpLintValidationTest extends TestCase
 
     public function testItThrowsAnExceptionWhenObjectIsNotBuiltViaFactory(): void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Validator was not built via it\'s factory');
 
         // Given

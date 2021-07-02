@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Exceptions;
 
-class NoConvertersEnabledException extends \Exception
+use Exception;
+
+class NoConvertersEnabledException extends Exception
 {
 }

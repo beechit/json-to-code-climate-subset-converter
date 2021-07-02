@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Exceptions;
 
-class UnableToCreateDescription extends \Exception
+use Exception;
+
+class UnableToCreateDescription extends Exception
 {
 }

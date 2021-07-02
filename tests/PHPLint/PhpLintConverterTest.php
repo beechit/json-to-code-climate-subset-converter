@@ -14,6 +14,7 @@ use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
 use BeechIt\JsonToCodeClimateSubsetConverter\Utilities\SafeMethods;
 use function file_get_contents;
 use function json_decode;
+use LogicException;
 use Safe\Exceptions\JsonException;
 use Safe\Exceptions\StringsException;
 
@@ -193,7 +194,7 @@ class PhpLintConverterTest extends TestCase
 
     public function testItThrowsAnExceptionWhenObjectIsNotBuiltViaFactory(): void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Converter was not built via it\'s factory');
 
         // Given

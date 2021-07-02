@@ -12,6 +12,7 @@ use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\ConvertToSubsetInterface
 use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\OutputInterface;
 use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\SafeMethodsInterface;
 use function debug_backtrace;
+use LogicException;
 use Safe\Exceptions\JsonException;
 use Safe\Exceptions\StringsException;
 
@@ -53,7 +54,7 @@ abstract class AbstractConverter implements OutputInterface, ConvertToSubsetInte
         $constructingClass = $backtrace[1]['class'];
 
         if (ConverterFactory::class !== $constructingClass) {
-            throw new \LogicException('Converter was not built via it\'s factory');
+            throw new LogicException('Converter was not built via it\'s factory');
         }
 
         $this->abstractJsonValidator = $abstractJsonValidator;
