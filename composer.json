@@ -27,23 +27,20 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.3|^8.0",
         "ext-json": "*",
         "phlak/config": "^7.0",
-        "symfony/console": "^4.0|^5.0",
-        "thecodingmachine/safe": "^1.0"
+        "symfony/console": "^4.0|^5.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
         "infection/infection": "^0.18.2",
         "overtrue/phplint": "^1.2",
-        "phan/phan": "^2.4",
+        "phan/phan": "^4.0",
         "phpstan/phpstan": "^0.12.7",
-        "phpunit/phpunit": "^8.0",
-        "rector/rector": "^0.6.13",
+        "phpunit/phpunit": "^9.0",
         "rregeer/phpunit-coverage-check": "^0.3.1",
         "squizlabs/php_codesniffer": "^3.5",
-        "thecodingmachine/phpstan-safe-rule": "^1.0",
         "vimeo/psalm": "^3.8"
     },
     "bin": [
@@ -61,8 +58,15 @@
     },
     "scripts": {
         "phpunit": "vendor/bin/phpunit",
-        "infection": "vendor/bin/infection",
-        "infection-ci": "XDEBUG_MODE=coverage vendor/bin/infection",
+        "phpunit-ci": "vendor/bin/phpunit && vendor/bin/coverage-check build/coverage/clover.xml 100",
+        "infection": [
+            "phpunit",
+            "vendor/bin/infection --coverage=build/coverage"
+        ],
+        "infection-ci": [
+            "phpunit",
+            "XDEBUG_MODE=coverage vendor/bin/infection --coverage=build/coverage --min-msi=100 --min-covered-msi=100"
+        ],
         "phpstan": "vendor/bin/phpstan analyse src --level max",
         "psalm": "vendor/bin/psalm src",
         "phplint": "vendor/bin/phplint src",
@@ -71,7 +75,6 @@
         "php-cbf": "vendor/bin/phpcbf src --standard=PSR1,PSR2,PSR12",
         "php-cs": "vendor/bin/phpcs src --standard=PSR1,PSR2,PSR12",
         "phan": "vendor/bin/phan --allow-polyfill-parser src",
-        "rector-safe": "vendor/bin/rector process src/ --config vendor/thecodingmachine/safe/rector-migrate-0.6.yml",
         "docker-build": "docker build -t converter ."
     },
     "config": {

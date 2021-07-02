@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Exceptions;
 
-class NoValidatorsEnabledException extends \Exception
+use Exception;
+
+class NoValidatorsEnabledException extends Exception
 {
 }

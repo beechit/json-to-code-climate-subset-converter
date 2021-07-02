@@ -8,6 +8,7 @@ use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\InvalidJsonException;
 use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ValidatorFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Interfaces\JsonValidatorInterface;
 use function debug_backtrace;
+use LogicException;
 
 abstract class AbstractJsonValidator implements JsonValidatorInterface
 {
@@ -29,7 +30,7 @@ abstract class AbstractJsonValidator implements JsonValidatorInterface
         $constructingClass = $backtrace[1]['class'];
 
         if (ValidatorFactory::class !== $constructingClass) {
-            throw new \LogicException('Validator was not built via it\'s factory');
+            throw new LogicException('Validator was not built via it\'s factory');
         }
 
         $this->json = $json;

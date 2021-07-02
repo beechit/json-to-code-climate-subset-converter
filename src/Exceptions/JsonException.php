@@ -6,6 +6,9 @@ namespace BeechIt\JsonToCodeClimateSubsetConverter\Exceptions;
 
 use Exception;
 
-class UnableToCreateFilenameException extends Exception
+/**
+ * @codeCoverageIgnore
+ */
+class JsonException extends Exception
 {
 }

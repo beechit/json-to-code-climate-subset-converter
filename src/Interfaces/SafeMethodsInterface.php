@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace BeechIt\JsonToCodeClimateSubsetConverter\Interfaces;
 
-use Safe\Exceptions\FilesystemException;
-use Safe\Exceptions\JsonException;
-use Safe\Exceptions\StringsException;
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\FilesystemException;
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\JsonException;
+use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\StringsException;
 
 interface SafeMethodsInterface
 {
@@ -17,7 +17,7 @@ interface SafeMethodsInterface
     const FILE_PUT_CONTENTS_FLAGS = 0;
 
     /**
-     * @param $value
+     * @param mixed $value
      *
      * @throws JsonException
      */
@@ -51,18 +51,24 @@ interface SafeMethodsInterface
      * @param null  $context
      *
      * @throws FilesystemException
-     *
-     * @return mixed
      */
     public function file_put_contents(
         string $filename,
         $data,
         int $flags = self::FILE_PUT_CONTENTS_FLAGS,
         $context = null
-    );
+    ): int;
 
     /**
-     * @return mixed
+     * @param null $context
+     *
+     * @throws FilesystemException
      */
-    public function file_get_contents(string $filename);
+    public function file_get_contents(
+        string $filename,
+        bool $use_include_path = false,
+        $context = null,
+        int $offset = 0,
+        int $maxlen = null
+    ): string;
 }
