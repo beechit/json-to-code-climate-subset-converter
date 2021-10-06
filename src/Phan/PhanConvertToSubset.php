@@ -9,6 +9,12 @@ use BeechIt\JsonToCodeClimateSubsetConverter\Exceptions\InvalidJsonException;
 
 final class PhanConvertToSubset extends AbstractConverter
 {
+    private const SEVERITY_LEVELS = [
+        0 => 'info',
+        5 => 'minor',
+        10 => 'critical'
+    ];
+    
     public function convertToSubset(): void
     {
         try {
@@ -22,6 +28,7 @@ final class PhanConvertToSubset extends AbstractConverter
                         $node->location->path,
                         $node->location->lines->begin
                     ),
+                    'severity' => self::SEVERITY_LEVELS[$node->severity] ?? null,
                     'location' => [
                         'path' => $node->location->path,
                         'lines' => [
