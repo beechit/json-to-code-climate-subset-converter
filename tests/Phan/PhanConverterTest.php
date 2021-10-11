@@ -40,6 +40,7 @@ class PhanConverterTest extends TestCase
                 [
                     'description' => '(Phan) UndefError PhanUndeclaredClassConstant Reference to constant class from undeclared class \PhpParser\Node\Stmt\ClassMethod',
                     'fingerprint' => 'e8547906ee21b4f8e8804de980a9d239',
+                    'severity' => 'critical',
                     'location' => [
                         'path' => 'app/Class.php',
                         'lines' => [
