@@ -12,9 +12,9 @@ final class PhanConvertToSubset extends AbstractConverter
     private const SEVERITY_LEVELS = [
         0 => 'info',
         5 => 'minor',
-        10 => 'critical'
+        10 => 'critical',
     ];
-    
+
     public function convertToSubset(): void
     {
         try {
