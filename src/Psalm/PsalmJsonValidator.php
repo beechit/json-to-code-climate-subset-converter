@@ -27,6 +27,10 @@ class PsalmJsonValidator extends AbstractJsonValidator
             if (!property_exists($node, 'line_to')) {
                 throw new InvalidJsonException('The [line_to] is a required property');
             }
+
+            if (!property_exists($node, 'severity')) {
+                throw new InvalidJsonException('The [severity] is a required property');
+            }
         }
     }
 }

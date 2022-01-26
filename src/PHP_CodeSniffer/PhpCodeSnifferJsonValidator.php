@@ -28,6 +28,10 @@ class PhpCodeSnifferJsonValidator extends AbstractJsonValidator
                 if (!property_exists($node, 'line')) {
                     throw new InvalidJsonException('The [files.messages.line] is a required property');
                 }
+
+                if (!property_exists($node, 'type')) {
+                    throw new InvalidJsonException('The [files.messages.type] is a required property');
+                }
             }
         }
     }
