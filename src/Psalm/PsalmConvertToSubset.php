@@ -22,6 +22,7 @@ final class PsalmConvertToSubset extends AbstractConverter
                         $node->file_name,
                         $node->line_from
                     ),
+                    'severity' => $this->getSeverity($node->severity),
                     'location' => [
                         'path' => $node->file_name,
                         'lines' => [
@@ -39,5 +40,11 @@ final class PsalmConvertToSubset extends AbstractConverter
     public function getToolName(): string
     {
         return 'Psalm';
+    }
+
+    private function getSeverity(string $severity): string
+    {
+        // can be info, minor, major, critical, or blocker
+        return 'error' === $severity ? 'major' : 'minor';
     }
 }

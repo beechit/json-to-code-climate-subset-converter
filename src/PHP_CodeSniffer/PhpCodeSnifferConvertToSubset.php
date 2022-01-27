@@ -23,6 +23,7 @@ final class PhpCodeSnifferConvertToSubset extends AbstractConverter
                             $filename,
                             $node->line
                         ),
+                        'severity' => $this->getSeverity($node->type),
                         'location' => [
                             'path' => $filename,
                             'lines' => [
@@ -40,5 +41,11 @@ final class PhpCodeSnifferConvertToSubset extends AbstractConverter
     public function getToolName(): string
     {
         return 'PHP_CodeSniffer';
+    }
+
+    private function getSeverity(string $type): string
+    {
+        // can be info, minor, major, critical, or blocker
+        return 'ERROR' === $type ? 'major' : 'minor';
     }
 }

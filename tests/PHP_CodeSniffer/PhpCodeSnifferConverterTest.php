@@ -7,6 +7,8 @@ namespace BeechIt\JsonToCodeClimateSubsetConverter\Tests\PHP_CodeSniffer;
 use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ConverterFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Factories\ValidatorFactory;
 use BeechIt\JsonToCodeClimateSubsetConverter\Tests\TestCase;
+use function file_get_contents;
+use function json_decode;
 
 /**
  * @internal
@@ -40,6 +42,7 @@ class PhpCodeSnifferConverterTest extends TestCase
                 [
                     'description' => '(PHP_CodeSniffer) Missing file doc comment',
                     'fingerprint' => 'fa33b2f8044e0f23de6b53f15d4d7bc9',
+                    'severity' => 'major',
                     'location' => [
                         'path' => 'app/Class.php',
                         'lines' => [

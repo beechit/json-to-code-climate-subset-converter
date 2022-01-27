@@ -52,6 +52,7 @@ class TestCase extends BaseTestCase
                 'output' => [
                     'description' => '(PHP_CodeSniffer) Missing file doc comment',
                     'fingerprint' => 'fa33b2f8044e0f23de6b53f15d4d7bc9',
+                    'severity' => 'major',
                     'location' => [
                         'path' => 'app/Class.php',
                         'lines' => [
@@ -103,6 +104,7 @@ class TestCase extends BaseTestCase
                 'output' => [
                     'description' => '(Psalm) Property Illuminate\\Foundation\\Console\\Kernel::$artisan is not defined in constructor of App\\Console\\Kernel and in any methods called in the constructor',
                     'fingerprint' => '206df1cdb86fc7fc14b049a658832473',
+                    'severity' => 'minor',
                     'location' => [
                         'path' => 'app/Class.php',
                         'lines' => [
